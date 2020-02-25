@@ -1,6 +1,6 @@
 .layout-profile {
     text-align: center;
-    padding: 20px 0;
+    padding: 8px 0;
 
     img {
         width: 56px;
@@ -10,7 +10,7 @@
     .layout-profile-link {
         cursor: pointer;
         display: inline-block;
-        margin-bottom: .75em;
+        margin-bottom: 0.75em;
         @include transition(color $transitionDuration);
 
         i {
@@ -29,7 +29,7 @@
         @include transition-property(max-height);
         @include transition-duration(0.4s);
         @include transition-timing-function(cubic-bezier(0.86, 0, 0.07, 1));
-       
+
         &.layout-profile-expanded {
             max-height: 500px;
         }
@@ -48,7 +48,7 @@
                 }
 
                 span {
-                    margin-left: .25em;
+                    margin-left: 0.25em;
                     vertical-align: middle;
                 }
 
@@ -64,7 +64,7 @@
     .layout-profile {
         .layout-profile-link {
             color: $menuitemColor;
-    
+
             &:hover {
                 color: $menuitemHoverColor;
             }
@@ -90,7 +90,7 @@
     .layout-profile {
         .layout-profile-link {
             color: $menuitemDarkColor;
-    
+
             &:hover {
                 color: $menuitemDarkHoverColor;
             }

@@ -96,45 +96,50 @@ class App extends Component {
             {
                 label: "Dashboard",
                 icon: "pi pi-fw pi-home",
-                command: () => {
-                    window.location = "/";
-                }
+                to: "/"
             },
             {
-                label: "Menu Modes",
-                icon: "pi pi-fw pi-cog",
+                label: "Catagories",
+                icon: "pi pi-fw pi-tags",
+                to: "/catagories"
+            },
+            {
+                label: "Products",
+                icon: "pi pi-fw pi-mobile",
+                to: "/products"
+            },
+            {
+                label: "Supplires",
+                icon: "pi pi-fw pi-users",
+                to: "/supplires"
+            },
+            {
+                label: "Purchase",
+                icon: "pi pi-fw pi-money-bill",
+                to: "/purchase"
+            },
+            {
+                label: "Stock Mangement",
+                icon: "pi pi-fw pi-bars",
                 items: [
                     {
-                        label: "Static Menu",
-                        icon: "pi pi-fw pi-bars",
-                        command: () => this.setState({ layoutMode: "static" })
+                        label: "Stock",
+                        icon: "pi pi-fw pi-th-large",
+                        to: "/stock"
                     },
                     {
-                        label: "Overlay Menu",
-                        icon: "pi pi-fw pi-bars",
-                        command: () => this.setState({ layoutMode: "overlay" })
-                    }
-                ]
-            },
-            {
-                label: "Menu Colors",
-                icon: "pi pi-fw pi-align-left",
-                items: [
-                    {
-                        label: "Dark",
-                        icon: "pi pi-fw pi-bars",
-                        command: () =>
-                            this.setState({ layoutColorMode: "dark" })
+                        label: "Stock Movement",
+                        icon: "pi pi-fw pi-sort",
+                        to: "/panels"
                     },
                     {
-                        label: "Light",
-                        icon: "pi pi-fw pi-bars",
-                        command: () =>
-                            this.setState({ layoutColorMode: "light" })
+                        label: "Stock Ledger",
+                        icon: "pi pi-fw pi-file",
+                        to: "/panels"
                     }
                 ]
-            },
-            {
+            }
+            /* {
                 label: "Components",
                 icon: "pi pi-fw pi-globe",
                 badge: "9",
@@ -276,7 +281,7 @@ class App extends Component {
                 command: () => {
                     window.location = "https://github.com/primefaces/sigma";
                 }
-            }
+            } */
         ];
     }
 
@@ -340,7 +345,8 @@ class App extends Component {
                     onClick={this.onSidebarClick}
                 >
                     <div className="layout-logo">
-                        <img alt="Logo" src={logo} />
+                        <div className="app-name">Invento</div>
+                        <i className="pi pi-shopping-cart"></i>
                     </div>
                     <AppProfile />
                     <AppMenu
