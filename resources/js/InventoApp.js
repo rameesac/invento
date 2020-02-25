@@ -1,10 +1,9 @@
 import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
 import classNames from "classnames";
 import { AppTopbar } from "./AppTopbar";
-import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppProfile } from "./AppProfile";
-import { Route } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard";
 import { FormsDemo } from "./components/FormsDemo";
 import { SampleDemo } from "./components/SampleDemo";
@@ -98,7 +97,7 @@ class App extends Component {
                 label: "Dashboard",
                 icon: "pi pi-fw pi-home",
                 command: () => {
-                    window.location = "#/";
+                    window.location = "/";
                 }
             },
             {
@@ -268,7 +267,7 @@ class App extends Component {
                 label: "Documentation",
                 icon: "pi pi-fw pi-question",
                 command: () => {
-                    window.location = "#/documentation";
+                    window.location = "/documentation";
                 }
             },
             {
@@ -351,21 +350,24 @@ class App extends Component {
                 </div>
 
                 <div className="layout-main">
-                    <Route path="/" exact component={Dashboard} />
-                    <Route path="/forms" component={FormsDemo} />
-                    <Route path="/sample" component={SampleDemo} />
-                    <Route path="/data" component={DataDemo} />
-                    <Route path="/panels" component={PanelsDemo} />
-                    <Route path="/overlays" component={OverlaysDemo} />
-                    <Route path="/menus" component={MenusDemo} />
-                    <Route path="/messages" component={MessagesDemo} />
-                    <Route path="/charts" component={ChartsDemo} />
-                    <Route path="/misc" component={MiscDemo} />
-                    <Route path="/empty" component={EmptyPage} />
-                    <Route path="/documentation" component={Documentation} />
+                    <Switch>
+                        <Route path="/" exact component={Dashboard} />
+                        <Route path="/forms" component={FormsDemo} />
+                        <Route path="/sample" component={SampleDemo} />
+                        <Route path="/data" component={DataDemo} />
+                        <Route path="/panels" component={PanelsDemo} />
+                        <Route path="/overlays" component={OverlaysDemo} />
+                        <Route path="/menus" component={MenusDemo} />
+                        <Route path="/messages" component={MessagesDemo} />
+                        <Route path="/charts" component={ChartsDemo} />
+                        <Route path="/misc" component={MiscDemo} />
+                        <Route path="/empty" component={EmptyPage} />
+                        <Route
+                            path="/documentation"
+                            component={Documentation}
+                        />
+                    </Switch>
                 </div>
-
-                <AppFooter />
 
                 <div className="layout-mask"></div>
             </div>
