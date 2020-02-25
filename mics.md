@@ -7,9 +7,11 @@ php artisan make:migration create_catagories_table --create=category
     {
         Schema::create('category', function (Blueprint $table) {
             $table->increments('id');
+            
             $table->string('name', 100);
             $table->char('code', 100);
             $table->longText('description')->nullable($value = true);
+            
             $table->tinyInteger('status')->default(1);
             $table->mediumInteger('created_by')->nullable($value = true);
             $table->mediumInteger('updated_by')->nullable($value = true);
@@ -26,6 +28,7 @@ php artisan make:migration create_suppliers_table --create=supplier
     {
         Schema::create('supplier', function (Blueprint $table) {
             $table->increments('id');
+            
             $table->string('name', 250);
             $table->char('code', 100);
             $table->string('contact_person', 250)->nullable($value = true);
@@ -33,8 +36,10 @@ php artisan make:migration create_suppliers_table --create=supplier
             $table->string('email', 50)->nullable($value = true);
             $table->string('address_one', 250)->nullable($value = true);
             $table->string('address_two', 250)->nullable($value = true);
+            
             $table->longText('description')->nullable($value = true);
             $table->tinyInteger('status')->default(1);
+            
             $table->mediumInteger('created_by')->nullable($value = true);
             $table->mediumInteger('updated_by')->nullable($value = true);
             $table->timestamps();
@@ -50,17 +55,22 @@ php artisan make:migration create_products_table --create=product
     {
         Schema::create('product', function (Blueprint $table) {
             $table->increments('id');
+            
             $table->string('name', 250);
             $table->char('code', 100);
             $table->string('barcode', 250);
+            
             $table->integer('category_id');
             $table->foreign('category_id')->references('id')->on('category');
+            
             $table->integer('quantity');
             $table->double('rate', 8, 2);
             $table->double('cost', 8, 2);
-            $table->longText('description')->nullable($value = true);
+            
             $table->longText('image')->nullable($value = true);
+            $table->longText('description')->nullable($value = true);
             $table->tinyInteger('status')->default(1);
+            
             $table->mediumInteger('created_by')->nullable($value = true);
             $table->mediumInteger('updated_by')->nullable($value = true);
             $table->timestamps();
@@ -76,14 +86,20 @@ php artisan make:migration create_purchases_table --create=purchase
     {
         Schema::create('purchase', function (Blueprint $table) {
             $table->increments('id');
+            
+            $table->tinyInteger('dr_cr')->nullable($value = true);
+            $table->date('purchase_date');
+            
             $table->integer('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('supplier');
-            $table->tinyInteger('dr_cr')->nullable($value = true);
+            
             $table->double('tax_amount', 8, 2);
             $table->double('total', 8, 2);
             $table->double('discount', 8, 2);
+            
             $table->longText('description')->nullable($value = true);
             $table->tinyInteger('status')->default(1);
+            
             $table->mediumInteger('created_by')->nullable($value = true);
             $table->mediumInteger('updated_by')->nullable($value = true);
             $table->timestamps();
@@ -99,14 +115,21 @@ php artisan make:migration create_purchase_details_table --create=purchase_detai
     {
         Schema::create('purchase_details', function (Blueprint $table) {
             $table->increments('id');
+            
             $table->integer('purchase_id');
             $table->foreign('purchase_id')->references('id')->on('purchase');
-            $table->tinyInteger('dr_cr')->nullable($value = true);
-            $table->double('tax_amount', 8, 2);
-            $table->double('total', 8, 2);
+            
+            $table->integer('product_id');
+            $table->foreign('product_id')->references('id')->on('product');
+            
+            $table->integer('quantity');
+            $table->double('cost', 8, 2);
             $table->double('discount', 8, 2);
+            $table->double('net_amount', 8, 2);
+            
             $table->longText('description')->nullable($value = true);
             $table->tinyInteger('status')->default(1);
+            
             $table->mediumInteger('created_by')->nullable($value = true);
             $table->mediumInteger('updated_by')->nullable($value = true);
             $table->timestamps();
