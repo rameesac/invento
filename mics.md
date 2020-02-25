@@ -63,8 +63,6 @@ php artisan make:migration create_products_table --create=product
             $table->integer('category_id');
             $table->foreign('category_id')->references('id')->on('category');
             
-            $table->integer('quantity');
-            $table->double('rate', 8, 2);
             $table->double('cost', 8, 2);
             
             $table->longText('image')->nullable($value = true);
@@ -134,5 +132,65 @@ php artisan make:migration create_purchase_details_table --create=purchase_detai
             $table->mediumInteger('updated_by')->nullable($value = true);
             $table->timestamps();
             $table->softDeletes();
+        });
+    }
+    
+## Stock
+
+php artisan make:migration create_stocks_table --create=stock
+
+    public function up()
+    {
+        Schema::create('stock', function (Blueprint $table) {
+            $table->increments('id');
+            
+            $table->integer('product_id');
+            $table->foreign('product_id')->references('id')->on('product');
+            
+            $table->integer('quantity');
+            $table->double('rate', 8, 2);
+            
+            $table->mediumInteger('created_by')->nullable($value = true);
+            $table->mediumInteger('updated_by')->nullable($value = true);
+            $table->timestamps();
+        });
+    }
+    
+## Stock Movement Type
+
+php artisan make:migration create_stock_movement_types_table --create=stock_movement_type
+
+    public function up()
+    {
+        Schema::create('stock_movement_type', function (Blueprint $table) {
+            $table->increments('id');
+            $table->boolean('is_visible')->default(true);
+            $table->string('name');
+        });
+    }
+    
+## Stock Ledger
+
+php artisan make:migration create_stock_ledgers_table --create=stock_ledger
+
+    public function up()
+    {
+        Schema::create('stock_ledger', function (Blueprint $table) {
+            $table->increments('id');
+            
+            $table->integer('stock_movement_type_id');
+            $table->foreign('stock_movement_type_id')->references('id')->on('stock_movement_type');
+            
+            $table->integer('purchase_id')->nullable($value = true);;
+            $table->foreign('purchase_id')->references('id')->on('purchase');
+            
+            $table->integer('previouse_quantity');
+            $table->integer('latest_quantity');
+            
+            $table->longText('description')->nullable($value = true);
+            
+            $table->mediumInteger('created_by')->nullable($value = true);
+            $table->mediumInteger('updated_by')->nullable($value = true);
+            $table->timestamps();
         });
     }
