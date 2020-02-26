@@ -50,6 +50,7 @@
     },
     "dependencies": {
         "@clr/icons": "^2.3.8",
-        "@webcomponents/custom-elements": "^1.0.0"
+        "@webcomponents/custom-elements": "^1.0.0",
+        "react-toastify": "^5.5.0"
     }
 }

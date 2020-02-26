@@ -16,6 +16,12 @@ import { ChartsDemo } from "./components/ChartsDemo";
 import { MiscDemo } from "./components/MiscDemo";
 import { EmptyPage } from "./components/EmptyPage";
 import { Documentation } from "./components/Documentation";
+
+/* Pages */
+import Categories from "./components/pages/category/Categories";
+import Suppliers from "./components/pages/suppliers/Suppliers";
+/* Pages */
+
 import "primereact/resources/themes/nova-light/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -109,9 +115,9 @@ class App extends Component {
                 to: "/products"
             },
             {
-                label: "Supplires",
+                label: "Suppliers",
                 icon: "pi pi-fw pi-users",
-                to: "/supplires"
+                to: "/suppliers"
             },
             {
                 label: "Purchase",
@@ -138,8 +144,8 @@ class App extends Component {
                         to: "/panels"
                     }
                 ]
-            }
-            /* {
+            },
+            {
                 label: "Components",
                 icon: "pi pi-fw pi-globe",
                 badge: "9",
@@ -281,7 +287,7 @@ class App extends Component {
                 command: () => {
                     window.location = "https://github.com/primefaces/sigma";
                 }
-            } */
+            }
         ];
     }
 
@@ -372,6 +378,8 @@ class App extends Component {
                             path="/documentation"
                             component={Documentation}
                         />
+                        <Route path="/catagories" component={Categories} />
+                        <Route path="/suppliers" component={Suppliers} />
                     </Switch>
                 </div>
 

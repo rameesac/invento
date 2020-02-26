@@ -14,8 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
-        return $category;
+        return Category::all();
     }
 
     /**
@@ -26,41 +25,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Category $category)
-    {
-        //
+        if ($request->id) {
+            $category = Category::find($request->id);
+        } else {
+            $category = new Category;
+        }
+        $category->name = $request->name;
+        $category->code = "CAT_" . strtoupper(substr(trim($request->name), 0, 3));
+        $category->description = $request->description;
+        $category->save();
+        return $category;
     }
 
     /**
@@ -69,8 +43,8 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(int $id)
     {
-        //
+        return Category::destroy($id);
     }
 }

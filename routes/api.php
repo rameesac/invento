@@ -18,33 +18,33 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('category', 'CategoryController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
 
 Route::resource('supplier', 'SupplierController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
 
 Route::resource('product', 'ProductController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
 
 Route::resource('purchase', 'PurchaseController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
 
 Route::resource('purchase_details', 'PurchaseDetailsController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
 
 Route::resource('stock', 'StockController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
 
 Route::resource('stock_movement_type', 'StockMovementTypeController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
 
 Route::resource('stock_ledger', 'StockLedgerController')->except([
-    'create',
+    'create', 'edit', 'update', 'show'
 ]);
