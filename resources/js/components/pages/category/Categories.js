@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
-import { toast } from "react-toastify";
+import showToast from "../../../service/ToastServiceService";
 
 const Categories = () => {
     const initialData = {
@@ -64,24 +64,16 @@ const Categories = () => {
         event.preventDefault();
         try {
             await categoryService.saveCategory(category);
-            toast.success("Category has beed created successfully", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            showToast({
+                message: `Category has beed ${(!category.id ? 'created' : 'updated')} successfully`,
+                type: 'SUCCESS'
             });
             intiData();
             setVisible(false);
         } catch (error) {
-            toast.error("Error while creating", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            showToast({
+                message: `Error while ${(!category.id ? 'creating' : 'updating')}`,
+                type: 'ERROR'
             });
             setVisible(false);
         }
@@ -91,24 +83,16 @@ const Categories = () => {
         event.preventDefault();
         try {
             await categoryService.deleteCategory(id);
-            toast.success("Category has beed deleted successfully", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            showToast({
+                message: 'Category has beed deleted successfully',
+                type: 'SUCCESS'
             });
             intiData();
             setVisibleDelete(false);
         } catch (error) {
-            toast.error("Error while deleting", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            showToast({
+                message: 'Error while deleting',
+                type: 'ERROR'
             });
             setVisibleDelete(false);
         }
