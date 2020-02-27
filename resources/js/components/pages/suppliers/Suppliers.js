@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 
-import * as supplierService from "../../../service/SupplierService";
-import showToast from "../../../service/ToastServiceService";
+import * as supplierService from '../../../service/SupplierService';
+import showToast from '../../../service/ToastService';
 
 const Suppliers = () => {
     const initialData = {
         id: null,
-        name: "",
-        contact_person: "",
-        mobile: "",
-        email: "",
-        address_one: "",
-        address_two: "",
-        description: ""
+        name: '',
+        contact_person: '',
+        mobile: '',
+        email: '',
+        address_one: '',
+        address_two: '',
+        description: ''
     };
     const [supplier, setSupplier] = useState(initialData);
     const [id, setId] = useState(null);
@@ -69,24 +69,27 @@ const Suppliers = () => {
         try {
             await supplierService.save(supplier);
             showToast({
-                message: `Supplier has beed ${(!supplier.id ? 'created' : 'updated')} successfully`,
+                message: `Supplier has beed ${
+                    !supplier.id ? 'created' : 'updated'
+                } successfully`,
                 type: 'SUCCESS'
             });
             initData();
             setVisible(false);
         } catch (error) {
             showToast({
-                message: `Error while ${(!supplier.id ? 'creating' : 'updating')}`,
+                message: `Error while ${
+                    !supplier.id ? 'creating' : 'updating'
+                }`,
                 type: 'ERROR'
             });
-            setVisible(false);
         }
     }
 
     async function handleDelete(event, id) {
         event.preventDefault();
         try {
-            await supplierService.delete(id);
+            await supplierService.destroy(id);
             showToast({
                 message: 'Supplier has beed deleted successfully',
                 type: 'SUCCESS'
@@ -98,22 +101,21 @@ const Suppliers = () => {
                 message: 'Error while deleting',
                 type: 'ERROR'
             });
-            setVisibleDelete(false);
         }
     }
 
     function intiEditData(data) {
+        onClick();
         setSupplier({
             id: data.id,
             name: data.name,
-            name: data.contact_person,
-            name: data.mobile,
-            name: data.email,
-            name: data.address_one,
-            name: data.address_two,
+            contact_person: data.contact_person,
+            mobile: data.mobile,
+            email: data.email,
+            address_one: data.address_one,
+            address_two: data.address_two,
             description: data.description
         });
-        onClick();
     }
 
     const footer = (
@@ -156,17 +158,16 @@ const Suppliers = () => {
         </div>
     );
 
-    const actionTemplate = (rowData, column) => {
-        console.log(column);
+    const actionTemplate = (data, column) => {
         return (
             <div>
                 <Button
                     type="button"
                     icon="pi pi-pencil"
                     className="p-button-warning"
-                    style={{ marginRight: ".5em" }}
+                    style={{ marginRight: '.5em' }}
                     onClick={() => {
-                        intiEditData(rowData.id);
+                        intiEditData(data);
                     }}
                 ></Button>
                 <Button
@@ -174,7 +175,7 @@ const Suppliers = () => {
                     icon="pi pi-trash"
                     className="p-button-danger"
                     onClick={() => {
-                        onClickDelete(rowData.id);
+                        onClickDelete(data.id);
                     }}
                 ></Button>
             </div>
@@ -186,7 +187,7 @@ const Suppliers = () => {
             <div className="p-grid">
                 <div className="p-col-12">
                     <div className="card">
-                        <h1>Categories</h1>
+                        <h1>Suppliers</h1>
                         <Button
                             label="Create"
                             className="mb-3"
@@ -197,13 +198,16 @@ const Suppliers = () => {
                         />
                         <DataTable value={suppliers} responsive={true}>
                             <Column
-                                style={{ width: "50px" }}
+                                style={{ width: '50px' }}
                                 field="id"
                                 header="#"
                             />
                             <Column field="code" header="Code" />
                             <Column field="name" header="Name" />
-                            <Column field="contact_person" header="Contact Person" />
+                            <Column
+                                field="contact_person"
+                                header="Contact Person"
+                            />
                             <Column field="mobile" header="Mobile" />
                             <Column field="email" header="Email" />
                             <Column field="address_one" header="Address 1" />
@@ -212,7 +216,7 @@ const Suppliers = () => {
                             <Column field="created_at" header="Created On" />
                             <Column
                                 body={actionTemplate}
-                                style={{ textAlign: "center", width: "8em" }}
+                                style={{ textAlign: 'center', width: '8em' }}
                             />
                         </DataTable>
                     </div>
@@ -220,9 +224,11 @@ const Suppliers = () => {
             </div>
 
             <Dialog
-                header="Add / Update Supplier"
+                header={`${!supplier.id ? 'Create New' : 'Update'} Supplier ${
+                    supplier.name ? ': ' + supplier.name : ''
+                }`}
                 visible={visible}
-                style={{ width: "50vw" }}
+                style={{ width: '50vw' }}
                 footer={footer}
                 onHide={() => {
                     onHide();
@@ -236,8 +242,8 @@ const Suppliers = () => {
                         <InputText
                             id="name"
                             name="name"
-                            value={supplier.name || ""}
-                            style={{ width: "100%" }}
+                            value={supplier.name || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -248,10 +254,10 @@ const Suppliers = () => {
                     </div>
                     <div className="p-md-10">
                         <InputText
-                            id="name"
-                            name="name"
-                            value={supplier.contact_person || ""}
-                            style={{ width: "100%" }}
+                            id="contact_person"
+                            name="contact_person"
+                            value={supplier.contact_person || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -262,10 +268,10 @@ const Suppliers = () => {
                     </div>
                     <div className="p-md-10">
                         <InputText
-                            id="name"
-                            name="name"
-                            value={supplier.mobile || ""}
-                            style={{ width: "100%" }}
+                            id="mobile"
+                            name="mobile"
+                            value={supplier.mobile || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -276,10 +282,10 @@ const Suppliers = () => {
                     </div>
                     <div className="p-md-10">
                         <InputText
-                            id="name"
-                            name="name"
-                            value={supplier.email || ""}
-                            style={{ width: "100%" }}
+                            id="email"
+                            name="email"
+                            value={supplier.email || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -290,10 +296,10 @@ const Suppliers = () => {
                     </div>
                     <div className="p-md-10">
                         <InputText
-                            id="name"
-                            name="name"
-                            value={supplier.address_one || ""}
-                            style={{ width: "100%" }}
+                            id="address_one"
+                            name="address_one"
+                            value={supplier.address_one || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -304,10 +310,10 @@ const Suppliers = () => {
                     </div>
                     <div className="p-md-10">
                         <InputText
-                            id="name"
-                            name="name"
-                            value={supplier.address_two || ""}
-                            style={{ width: "100%" }}
+                            id="address_two"
+                            name="address_two"
+                            value={supplier.address_two || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -320,11 +326,11 @@ const Suppliers = () => {
                         <InputTextarea
                             rows={3}
                             name="description"
-                            value={category.description || ""}
+                            value={supplier.description || ''}
                             onChange={e => {
                                 handleChange(e);
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             autoResize={true}
                         />
                     </div>
@@ -334,7 +340,7 @@ const Suppliers = () => {
             <Dialog
                 header="Delete Supplier"
                 visible={visibleDelete}
-                style={{ width: "30vw" }}
+                style={{ width: '30vw' }}
                 footer={footerDelete}
                 onHide={() => {
                     onHideDelete();

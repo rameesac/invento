@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
 export async function get() {
-    return axios.get("/api/category").then(res => res.data);
+    return axios.get('/api/category').then(res => res.data);
 }
 
 export async function save(category) {
     return axios
-        .post("/api/category", { ...category })
+        .post('/api/category', { ...category })
         .then(function(response) {
             return response;
         })
@@ -15,9 +15,9 @@ export async function save(category) {
         });
 }
 
-export async function delete(id) {
+export async function destroy(id) {
     return axios
-        .delete("/api/category/" + id)
+        .delete('/api/category/' + id)
         .then(function(response) {
             return response;
         })

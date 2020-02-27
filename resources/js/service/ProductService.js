@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
 export async function get() {
-    return axios.get("/api/product").then(res => res.data);
+    return axios.get('/api/product').then(res => res.data);
 }
 
 export async function save(product) {
     return axios
-        .post("/api/product", { ...product })
+        .post('/api/product', { ...product })
         .then(function(response) {
             return response;
         })
@@ -15,9 +15,9 @@ export async function save(product) {
         });
 }
 
-export async function delete(id) {
+export async function destroy(id) {
     return axios
-        .delete("/api/product/" + id)
+        .delete('/api/product/' + id)
         .then(function(response) {
             return response;
         })

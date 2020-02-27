@@ -1,33 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown } from 'primereact/dropdown';
 
-import * as productService from "../../../service/ProductService";
-import showToast from "../../../service/ToastServiceService";
+import * as productService from '../../../service/ProductService';
+import * as categoryService from '../../../service/CategoryService';
+import showToast from '../../../service/ToastService';
 
 const Products = () => {
     const initialData = {
         id: null,
-        name: "",
-        barcode: "",
-        category_id: "",
-        cost: "",
-        description: ""
+        name: '',
+        barcode: '',
+        category_id: '',
+        cost: '',
+        description: ''
     };
     const [product, setProduct] = useState(initialData);
     const [id, setId] = useState(null);
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
 
     useEffect(() => {
         initData();
+        loadCatagories();
     }, []);
+
+    function loadCatagories() {
+        categoryService.get().then(data => {
+            data = data.map(catagory => {
+                catagory['key'] = catagory.id;
+                catagory['value'] = catagory.name;
+                return catagory;
+            });
+            setCategories(data);
+        });
+    }
 
     function initData() {
         productService.get().then(data => {
@@ -58,33 +73,34 @@ const Products = () => {
         const { name, value } = event.target;
         setProduct(data => ({
             ...data,
-            [name]: value
+            [name]: name === 'category_id' ? value.id : value
         }));
     }
 
     async function handleSave(event) {
         event.preventDefault();
         try {
-            await productService.save(setProducts);
+            await productService.save(product);
             showToast({
-                message: `Product has beed ${(!product.id ? 'created' : 'updated')} successfully`,
+                message: `Product has beed ${
+                    !product.id ? 'created' : 'updated'
+                } successfully`,
                 type: 'SUCCESS'
             });
             initData();
             setVisible(false);
         } catch (error) {
             showToast({
-                message: `Error while ${(!product.id ? 'creating' : 'updating')}`,
+                message: `Error while ${!product.id ? 'creating' : 'updating'}`,
                 type: 'ERROR'
             });
-            setVisible(false);
         }
     }
 
     async function handleDelete(event, id) {
         event.preventDefault();
         try {
-            await productService.delete(id);
+            await productService.destroy(id);
             showToast({
                 message: 'Product has beed deleted successfully',
                 type: 'SUCCESS'
@@ -96,20 +112,20 @@ const Products = () => {
                 message: 'Error while deleting',
                 type: 'ERROR'
             });
-            setVisibleDelete(false);
         }
     }
 
     function intiEditData(data) {
+        onClick();
         setProduct({
             id: data.id,
             name: data.name,
-            name: data.barcode,
-            name: data.category_id,
-            name: data.cost,
+            barcode: data.barcode,
+            category_id: data.category_id,
+            cost: data.cost,
             description: data.description
         });
-        onClick();
+        console.log(product);
     }
 
     const footer = (
@@ -159,9 +175,9 @@ const Products = () => {
                     type="button"
                     icon="pi pi-pencil"
                     className="p-button-warning"
-                    style={{ marginRight: ".5em" }}
+                    style={{ marginRight: '.5em' }}
                     onClick={() => {
-                        intiEditData(data.id);
+                        intiEditData(data);
                     }}
                 ></Button>
                 <Button
@@ -192,7 +208,7 @@ const Products = () => {
                         />
                         <DataTable value={products} responsive={true}>
                             <Column
-                                style={{ width: "50px" }}
+                                style={{ width: '50px' }}
                                 field="id"
                                 header="#"
                             />
@@ -205,7 +221,7 @@ const Products = () => {
                             <Column field="created_at" header="Created On" />
                             <Column
                                 body={actionTemplate}
-                                style={{ textAlign: "center", width: "8em" }}
+                                style={{ textAlign: 'center', width: '8em' }}
                             />
                         </DataTable>
                     </div>
@@ -213,9 +229,11 @@ const Products = () => {
             </div>
 
             <Dialog
-                header="Add / Update Product"
+                header={`${!product.id ? 'Create New' : 'Update'} Product ${
+                    product.name ? ': ' + product.name : ''
+                }`}
                 visible={visible}
-                style={{ width: "50vw" }}
+                style={{ width: '50vw' }}
                 footer={footer}
                 onHide={() => {
                     onHide();
@@ -229,8 +247,8 @@ const Products = () => {
                         <InputText
                             id="name"
                             name="name"
-                            value={product.name || ""}
-                            style={{ width: "100%" }}
+                            value={product.name || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -239,40 +257,43 @@ const Products = () => {
                     <div className="p-md-2">
                         <label htmlFor="barcode">Barcode</label>
                     </div>
-                    <div className="p-md-4">
+                    <div className="p-md-3">
                         <InputText
                             id="barcode"
                             name="barcode"
-                            value={product.barcode || ""}
-                            style={{ width: "100%" }}
+                            value={product.barcode || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
                         />
                     </div>
-                    <div className="p-md-2">
-                        <label htmlFor="catagory_id">Catagory</label>
+                    <div className="p-md-1">
+                        <label htmlFor="category_id">Catagory</label>
                     </div>
-                    <div className="p-md-4">
-                        <InputText
-                            id="catagory_id"
-                            name="catagory_id"
-                            value={product.catagory_id || ""}
-                            style={{ width: "100%" }}
+                    <div className="p-md-3">
+                        <Dropdown
+                            name="category_id"
+                            id="category_id"
+                            value={product.category_id || ''}
+                            optionLabel="name"
+                            options={categories}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
+                            placeholder="Select a Catagory"
                         />
                     </div>
-                    <div className="p-md-2">
+                    <div className="p-md-1">
                         <label htmlFor="cost">Cost</label>
                     </div>
-                    <div className="p-md-4">
+                    <div className="p-md-2">
                         <InputText
                             id="cost"
                             name="cost"
-                            value={product.cost || ""}
-                            style={{ width: "100%" }}
+                            value={product.cost || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -285,11 +306,11 @@ const Products = () => {
                         <InputTextarea
                             rows={3}
                             name="description"
-                            value={product.description || ""}
+                            value={product.description || ''}
                             onChange={e => {
                                 handleChange(e);
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             autoResize={true}
                         />
                     </div>
@@ -299,7 +320,7 @@ const Products = () => {
             <Dialog
                 header="Delete Product"
                 visible={visibleDelete}
-                style={{ width: "30vw" }}
+                style={{ width: '30vw' }}
                 footer={footerDelete}
                 onHide={() => {
                     onHideDelete();
