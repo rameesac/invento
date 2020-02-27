@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
-import { CategoryService } from "../../../service/CategoryService";
+
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+
 import showToast from "../../../service/ToastServiceService";
+import * from categoryService from "../../../service/CategoryService";
 
 const Categories = () => {
     const initialData = {
@@ -22,13 +24,11 @@ const Categories = () => {
     const categoryService = new CategoryService();
 
     useEffect(() => {
-        categoryService.getCategories().then(data => {
-            setCategories(data);
-        });
+        intiData()
     }, []);
 
     function intiData() {
-        categoryService.getCategories().then(data => {
+        categoryService.get().then(data => {
             setCategories(data);
         });
     }
@@ -63,7 +63,7 @@ const Categories = () => {
     async function handleSave(event) {
         event.preventDefault();
         try {
-            await categoryService.saveCategory(category);
+            await categoryService.save(category);
             showToast({
                 message: `Category has beed ${(!category.id ? 'created' : 'updated')} successfully`,
                 type: 'SUCCESS'
@@ -82,7 +82,7 @@ const Categories = () => {
     async function handleDelete(event, id) {
         event.preventDefault();
         try {
-            await categoryService.deleteCategory(id);
+            await categoryService.delete(id);
             showToast({
                 message: 'Category has beed deleted successfully',
                 type: 'SUCCESS'
