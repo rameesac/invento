@@ -222,7 +222,7 @@ const Categories = () => {
                         <InputText
                             id="name"
                             name="name"
-                            value={category.name}
+                            value={category.name || ""}
                             style={{ width: "100%" }}
                             onChange={e => {
                                 handleChange(e);
@@ -236,7 +236,7 @@ const Categories = () => {
                         <InputTextarea
                             rows={3}
                             name="description"
-                            value={category.description}
+                            value={category.description || ""}
                             onChange={e => {
                                 handleChange(e);
                             }}
