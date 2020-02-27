@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { DataTable } from "primereact/datatable";
-import { CategoryService } from "../../../service/CategoryService";
-import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from 'react';
+import { DataTable } from 'primereact/datatable';
+
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+
+import showToast from '../../../service/ToastService';
+import * as categoryService from '../../../service/CategoryService';
 
 const Categories = () => {
     const initialData = {
         id: null,
-        name: "",
-        description: ""
+        name: '',
+        description: ''
     };
     const [category, setCategory] = useState(initialData);
     const [id, setId] = useState(null);
     const [categories, setCategories] = useState([]);
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
-    const categoryService = new CategoryService();
 
     useEffect(() => {
-        categoryService.getCategories().then(data => {
-            setCategories(data);
-        });
+        intiData();
     }, []);
 
     function intiData() {
-        categoryService.getCategories().then(data => {
+        categoryService.get().then(data => {
             setCategories(data);
         });
     }
@@ -63,64 +62,50 @@ const Categories = () => {
     async function handleSave(event) {
         event.preventDefault();
         try {
-            await categoryService.saveCategory(category);
-            toast.success("Category has beed created successfully", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            await categoryService.save(category);
+            showToast({
+                message: `Category has beed ${
+                    !category.id ? 'created' : 'updated'
+                } successfully`,
+                type: 'SUCCESS'
             });
             intiData();
             setVisible(false);
         } catch (error) {
-            toast.error("Error while creating", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            showToast({
+                message: `Error while ${
+                    !category.id ? 'creating' : 'updating'
+                }`,
+                type: 'ERROR'
             });
-            setVisible(false);
         }
     }
 
     async function handleDelete(event, id) {
         event.preventDefault();
         try {
-            await categoryService.deleteCategory(id);
-            toast.success("Category has beed deleted successfully", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            await categoryService.destroy(id);
+            showToast({
+                message: 'Category has beed deleted successfully',
+                type: 'SUCCESS'
             });
             intiData();
             setVisibleDelete(false);
         } catch (error) {
-            toast.error("Error while deleting", {
-                position: "top-center",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
+            showToast({
+                message: 'Error while deleting',
+                type: 'ERROR'
             });
-            setVisibleDelete(false);
         }
     }
 
     function intiEditData(rowData) {
+        onClick();
         setCategory({
             id: rowData.id,
             name: rowData.name,
             description: rowData.description
         });
-        onClick();
     }
 
     const footer = (
@@ -164,16 +149,15 @@ const Categories = () => {
     );
 
     const actionTemplate = (rowData, column) => {
-        console.log(column);
         return (
             <div>
                 <Button
                     type="button"
                     icon="pi pi-pencil"
                     className="p-button-warning"
-                    style={{ marginRight: ".5em" }}
+                    style={{ marginRight: '.5em' }}
                     onClick={() => {
-                        intiEditData(rowData.id);
+                        intiEditData(rowData);
                     }}
                 ></Button>
                 <Button
@@ -204,7 +188,7 @@ const Categories = () => {
                         />
                         <DataTable value={categories} responsive={true}>
                             <Column
-                                style={{ width: "50px" }}
+                                style={{ width: '50px' }}
                                 field="id"
                                 header="#"
                             />
@@ -214,7 +198,7 @@ const Categories = () => {
                             <Column field="created_at" header="Created On" />
                             <Column
                                 body={actionTemplate}
-                                style={{ textAlign: "center", width: "8em" }}
+                                style={{ textAlign: 'center', width: '8em' }}
                             />
                         </DataTable>
                     </div>
@@ -222,9 +206,11 @@ const Categories = () => {
             </div>
 
             <Dialog
-                header="Add / Update Category"
+                header={`${!category.id ? 'Create New' : 'Update'} Category ${
+                    category.name ? ': ' + category.name : ''
+                }`}
                 visible={visible}
-                style={{ width: "50vw" }}
+                style={{ width: '50vw' }}
                 footer={footer}
                 onHide={() => {
                     onHide();
@@ -238,8 +224,8 @@ const Categories = () => {
                         <InputText
                             id="name"
                             name="name"
-                            value={category.name}
-                            style={{ width: "100%" }}
+                            value={category.name || ''}
+                            style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -252,11 +238,11 @@ const Categories = () => {
                         <InputTextarea
                             rows={3}
                             name="description"
-                            value={category.description}
+                            value={category.description || ''}
                             onChange={e => {
                                 handleChange(e);
                             }}
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             autoResize={true}
                         />
                     </div>
@@ -266,7 +252,7 @@ const Categories = () => {
             <Dialog
                 header="Delete Category"
                 visible={visibleDelete}
-                style={{ width: "30vw" }}
+                style={{ width: '30vw' }}
                 footer={footerDelete}
                 onHide={() => {
                     onHideDelete();

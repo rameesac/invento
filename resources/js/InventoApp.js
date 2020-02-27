@@ -1,43 +1,44 @@
-import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
-import classNames from "classnames";
-import { AppTopbar } from "./AppTopbar";
-import { AppMenu } from "./AppMenu";
-import { AppProfile } from "./AppProfile";
-import { Dashboard } from "./components/Dashboard";
-import { FormsDemo } from "./components/FormsDemo";
-import { SampleDemo } from "./components/SampleDemo";
-import { DataDemo } from "./components/DataDemo";
-import { PanelsDemo } from "./components/PanelsDemo";
-import { OverlaysDemo } from "./components/OverlaysDemo";
-import { MenusDemo } from "./components/MenusDemo";
-import { MessagesDemo } from "./components/MessagesDemo";
-import { ChartsDemo } from "./components/ChartsDemo";
-import { MiscDemo } from "./components/MiscDemo";
-import { EmptyPage } from "./components/EmptyPage";
-import { Documentation } from "./components/Documentation";
+import React, { Component } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import classNames from 'classnames';
+import { AppTopbar } from './AppTopbar';
+import { AppMenu } from './AppMenu';
+import { AppProfile } from './AppProfile';
+import { Dashboard } from './components/Dashboard';
+import { FormsDemo } from './components/FormsDemo';
+import { SampleDemo } from './components/SampleDemo';
+import { DataDemo } from './components/DataDemo';
+import { PanelsDemo } from './components/PanelsDemo';
+import { OverlaysDemo } from './components/OverlaysDemo';
+import { MenusDemo } from './components/MenusDemo';
+import { MessagesDemo } from './components/MessagesDemo';
+import { ChartsDemo } from './components/ChartsDemo';
+import { MiscDemo } from './components/MiscDemo';
+import { EmptyPage } from './components/EmptyPage';
+import { Documentation } from './components/Documentation';
 
 /* Pages */
-import Categories from "./components/pages/category/Categories";
-import Suppliers from "./components/pages/suppliers/Suppliers";
+import Categories from './components/pages/category/Categories';
+import Suppliers from './components/pages/suppliers/Suppliers';
+import Products from './components/pages/product/Products';
 /* Pages */
 
-import "primereact/resources/themes/nova-light/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
-import "@fullcalendar/core/main.css";
-import "@fullcalendar/daygrid/main.css";
-import "@fullcalendar/timegrid/main.css";
-import "./layout/layout.scss";
-import "./App.scss";
+import 'primereact/resources/themes/nova-light/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';
+import '@fullcalendar/core/main.css';
+import '@fullcalendar/daygrid/main.css';
+import '@fullcalendar/timegrid/main.css';
+import './layout/layout.scss';
+import './App.scss';
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            layoutMode: "static",
-            layoutColorMode: "dark",
+            layoutMode: 'static',
+            layoutColorMode: 'dark',
             staticMenuInactive: false,
             overlayMenuActive: false,
             mobileMenuActive: false
@@ -65,11 +66,11 @@ class App extends Component {
         this.menuClick = true;
 
         if (this.isDesktop()) {
-            if (this.state.layoutMode === "overlay") {
+            if (this.state.layoutMode === 'overlay') {
                 this.setState({
                     overlayMenuActive: !this.state.overlayMenuActive
                 });
-            } else if (this.state.layoutMode === "static") {
+            } else if (this.state.layoutMode === 'static') {
                 this.setState({
                     staticMenuInactive: !this.state.staticMenuInactive
                 });
@@ -100,173 +101,173 @@ class App extends Component {
     createMenu() {
         this.menu = [
             {
-                label: "Dashboard",
-                icon: "pi pi-fw pi-home",
-                to: "/"
+                label: 'Dashboard',
+                icon: 'pi pi-fw pi-home',
+                to: '/'
             },
             {
-                label: "Catagories",
-                icon: "pi pi-fw pi-tags",
-                to: "/catagories"
+                label: 'Catagories',
+                icon: 'pi pi-fw pi-tags',
+                to: '/catagories'
             },
             {
-                label: "Products",
-                icon: "pi pi-fw pi-mobile",
-                to: "/products"
+                label: 'Products',
+                icon: 'pi pi-fw pi-mobile',
+                to: '/products'
             },
             {
-                label: "Suppliers",
-                icon: "pi pi-fw pi-users",
-                to: "/suppliers"
+                label: 'Suppliers',
+                icon: 'pi pi-fw pi-users',
+                to: '/suppliers'
             },
             {
-                label: "Purchase",
-                icon: "pi pi-fw pi-money-bill",
-                to: "/purchase"
+                label: 'Purchase',
+                icon: 'pi pi-fw pi-money-bill',
+                to: '/purchase'
             },
             {
-                label: "Stock Mangement",
-                icon: "pi pi-fw pi-bars",
+                label: 'Stock Mangement',
+                icon: 'pi pi-fw pi-bars',
                 items: [
                     {
-                        label: "Stock",
-                        icon: "pi pi-fw pi-th-large",
-                        to: "/stock"
+                        label: 'Stock',
+                        icon: 'pi pi-fw pi-th-large',
+                        to: '/stock'
                     },
                     {
-                        label: "Stock Movement",
-                        icon: "pi pi-fw pi-sort",
-                        to: "/panels"
+                        label: 'Stock Movement',
+                        icon: 'pi pi-fw pi-sort',
+                        to: '/panels'
                     },
                     {
-                        label: "Stock Ledger",
-                        icon: "pi pi-fw pi-file",
-                        to: "/panels"
+                        label: 'Stock Ledger',
+                        icon: 'pi pi-fw pi-file',
+                        to: '/panels'
                     }
                 ]
             },
             {
-                label: "Components",
-                icon: "pi pi-fw pi-globe",
-                badge: "9",
+                label: 'Components',
+                icon: 'pi pi-fw pi-globe',
+                badge: '9',
                 items: [
                     {
-                        label: "Sample Page",
-                        icon: "pi pi-fw pi-th-large",
-                        to: "/sample"
+                        label: 'Sample Page',
+                        icon: 'pi pi-fw pi-th-large',
+                        to: '/sample'
                     },
-                    { label: "Forms", icon: "pi pi-fw pi-file", to: "/forms" },
-                    { label: "Data", icon: "pi pi-fw pi-table", to: "/data" },
+                    { label: 'Forms', icon: 'pi pi-fw pi-file', to: '/forms' },
+                    { label: 'Data', icon: 'pi pi-fw pi-table', to: '/data' },
                     {
-                        label: "Panels",
-                        icon: "pi pi-fw pi-list",
-                        to: "/panels"
-                    },
-                    {
-                        label: "Overlays",
-                        icon: "pi pi-fw pi-clone",
-                        to: "/overlays"
-                    },
-                    { label: "Menus", icon: "pi pi-fw pi-plus", to: "/menus" },
-                    {
-                        label: "Messages",
-                        icon: "pi pi-fw pi-spinner",
-                        to: "/messages"
+                        label: 'Panels',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/panels'
                     },
                     {
-                        label: "Charts",
-                        icon: "pi pi-fw pi-chart-bar",
-                        to: "/charts"
+                        label: 'Overlays',
+                        icon: 'pi pi-fw pi-clone',
+                        to: '/overlays'
                     },
-                    { label: "Misc", icon: "pi pi-fw pi-upload", to: "/misc" }
+                    { label: 'Menus', icon: 'pi pi-fw pi-plus', to: '/menus' },
+                    {
+                        label: 'Messages',
+                        icon: 'pi pi-fw pi-spinner',
+                        to: '/messages'
+                    },
+                    {
+                        label: 'Charts',
+                        icon: 'pi pi-fw pi-chart-bar',
+                        to: '/charts'
+                    },
+                    { label: 'Misc', icon: 'pi pi-fw pi-upload', to: '/misc' }
                 ]
             },
             {
-                label: "Template Pages",
-                icon: "pi pi-fw pi-file",
+                label: 'Template Pages',
+                icon: 'pi pi-fw pi-file',
                 items: [
                     {
-                        label: "Empty Page",
-                        icon: "pi pi-fw pi-circle-off",
-                        to: "/empty"
+                        label: 'Empty Page',
+                        icon: 'pi pi-fw pi-circle-off',
+                        to: '/empty'
                     }
                 ]
             },
             {
-                label: "Menu Hierarchy",
-                icon: "pi pi-fw pi-search",
+                label: 'Menu Hierarchy',
+                icon: 'pi pi-fw pi-search',
                 items: [
                     {
-                        label: "Submenu 1",
-                        icon: "pi pi-fw pi-bookmark",
+                        label: 'Submenu 1',
+                        icon: 'pi pi-fw pi-bookmark',
                         items: [
                             {
-                                label: "Submenu 1.1",
-                                icon: "pi pi-fw pi-bookmark",
+                                label: 'Submenu 1.1',
+                                icon: 'pi pi-fw pi-bookmark',
                                 items: [
                                     {
-                                        label: "Submenu 1.1.1",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 1.1.1',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     },
                                     {
-                                        label: "Submenu 1.1.2",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 1.1.2',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     },
                                     {
-                                        label: "Submenu 1.1.3",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 1.1.3',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     }
                                 ]
                             },
                             {
-                                label: "Submenu 1.2",
-                                icon: "pi pi-fw pi-bookmark",
+                                label: 'Submenu 1.2',
+                                icon: 'pi pi-fw pi-bookmark',
                                 items: [
                                     {
-                                        label: "Submenu 1.2.1",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 1.2.1',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     },
                                     {
-                                        label: "Submenu 1.2.2",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 1.2.2',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     }
                                 ]
                             }
                         ]
                     },
                     {
-                        label: "Submenu 2",
-                        icon: "pi pi-fw pi-bookmark",
+                        label: 'Submenu 2',
+                        icon: 'pi pi-fw pi-bookmark',
                         items: [
                             {
-                                label: "Submenu 2.1",
-                                icon: "pi pi-fw pi-bookmark",
+                                label: 'Submenu 2.1',
+                                icon: 'pi pi-fw pi-bookmark',
                                 items: [
                                     {
-                                        label: "Submenu 2.1.1",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 2.1.1',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     },
                                     {
-                                        label: "Submenu 2.1.2",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 2.1.2',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     },
                                     {
-                                        label: "Submenu 2.1.3",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 2.1.3',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     }
                                 ]
                             },
                             {
-                                label: "Submenu 2.2",
-                                icon: "pi pi-fw pi-bookmark",
+                                label: 'Submenu 2.2',
+                                icon: 'pi pi-fw pi-bookmark',
                                 items: [
                                     {
-                                        label: "Submenu 2.2.1",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 2.2.1',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     },
                                     {
-                                        label: "Submenu 2.2.2",
-                                        icon: "pi pi-fw pi-bookmark"
+                                        label: 'Submenu 2.2.2',
+                                        icon: 'pi pi-fw pi-bookmark'
                                     }
                                 ]
                             }
@@ -275,17 +276,17 @@ class App extends Component {
                 ]
             },
             {
-                label: "Documentation",
-                icon: "pi pi-fw pi-question",
+                label: 'Documentation',
+                icon: 'pi pi-fw pi-question',
                 command: () => {
-                    window.location = "/documentation";
+                    window.location = '/documentation';
                 }
             },
             {
-                label: "View Source",
-                icon: "pi pi-fw pi-search",
+                label: 'View Source',
+                icon: 'pi pi-fw pi-search',
                 command: () => {
-                    window.location = "https://github.com/primefaces/sigma";
+                    window.location = 'https://github.com/primefaces/sigma';
                 }
             }
         ];
@@ -293,7 +294,7 @@ class App extends Component {
 
     addClass(element, className) {
         if (element.classList) element.classList.add(className);
-        else element.className += " " + className;
+        else element.className += ' ' + className;
     }
 
     removeClass(element, className) {
@@ -301,10 +302,10 @@ class App extends Component {
         else
             element.className = element.className.replace(
                 new RegExp(
-                    "(^|\\b)" + className.split(" ").join("|") + "(\\b|$)",
-                    "gi"
+                    '(^|\\b)' + className.split(' ').join('|') + '(\\b|$)',
+                    'gi'
                 ),
-                " "
+                ' '
             );
     }
 
@@ -314,31 +315,31 @@ class App extends Component {
 
     componentDidUpdate() {
         if (this.state.mobileMenuActive)
-            this.addClass(document.body, "body-overflow-hidden");
-        else this.removeClass(document.body, "body-overflow-hidden");
+            this.addClass(document.body, 'body-overflow-hidden');
+        else this.removeClass(document.body, 'body-overflow-hidden');
     }
 
     render() {
         const logo =
-            this.state.layoutColorMode === "dark"
-                ? "assets/layout/images/logo-white.svg"
-                : "assets/layout/images/logo.svg";
+            this.state.layoutColorMode === 'dark'
+                ? 'assets/layout/images/logo-white.svg'
+                : 'assets/layout/images/logo.svg';
 
-        const wrapperClass = classNames("layout-wrapper", {
-            "layout-overlay": this.state.layoutMode === "overlay",
-            "layout-static": this.state.layoutMode === "static",
-            "layout-static-sidebar-inactive":
+        const wrapperClass = classNames('layout-wrapper', {
+            'layout-overlay': this.state.layoutMode === 'overlay',
+            'layout-static': this.state.layoutMode === 'static',
+            'layout-static-sidebar-inactive':
                 this.state.staticMenuInactive &&
-                this.state.layoutMode === "static",
-            "layout-overlay-sidebar-active":
+                this.state.layoutMode === 'static',
+            'layout-overlay-sidebar-active':
                 this.state.overlayMenuActive &&
-                this.state.layoutMode === "overlay",
-            "layout-mobile-sidebar-active": this.state.mobileMenuActive
+                this.state.layoutMode === 'overlay',
+            'layout-mobile-sidebar-active': this.state.mobileMenuActive
         });
 
-        const sidebarClassName = classNames("layout-sidebar", {
-            "layout-sidebar-dark": this.state.layoutColorMode === "dark",
-            "layout-sidebar-light": this.state.layoutColorMode === "light"
+        const sidebarClassName = classNames('layout-sidebar', {
+            'layout-sidebar-dark': this.state.layoutColorMode === 'dark',
+            'layout-sidebar-light': this.state.layoutColorMode === 'light'
         });
 
         return (
@@ -380,6 +381,7 @@ class App extends Component {
                         />
                         <Route path="/catagories" component={Categories} />
                         <Route path="/suppliers" component={Suppliers} />
+                        <Route path="/products" component={Products} />
                     </Switch>
                 </div>
 

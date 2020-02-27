@@ -14,8 +14,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $supplier = Supplier::all();
-        return $supplier;
+        return Supplier::all();
     }
 
     /**
@@ -26,41 +25,21 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Supplier $supplier)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Supplier $supplier)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Supplier $supplier)
-    {
-        //
+        if ($request->id) {
+            $supplier = Supplier::find($request->id);
+        } else {
+            $supplier = new Supplier;
+        }
+        $supplier->name = $request->name;
+        $supplier->code = "SUP_" . strtoupper(substr(trim($request->name), 0, 3));
+        $supplier->contact_person = $request->contact_person;
+        $supplier->mobile = $request->mobile;
+        $supplier->email = $request->email;
+        $supplier->address_one = $request->address_one;
+        $supplier->address_two = $request->address_two;
+        $supplier->description = $request->description;
+        $supplier->save();
+        return $supplier;
     }
 
     /**
@@ -71,6 +50,6 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        return Supplier::destroy($id);
     }
 }
