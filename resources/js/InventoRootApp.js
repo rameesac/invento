@@ -3,15 +3,28 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./InventoApp";
 //import * as serviceWorker from './serviceWorker';
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.render(
-    <HashRouter>
+    <Router>
         <ScrollToTop>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnVisibilityChange
+                draggable
+                pauseOnHover
+            />
             <App></App>
         </ScrollToTop>
-    </HashRouter>,
+    </Router>,
     document.getElementById("root")
 );
 

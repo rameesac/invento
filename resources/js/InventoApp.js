@@ -1,10 +1,9 @@
 import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
 import classNames from "classnames";
 import { AppTopbar } from "./AppTopbar";
-import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppProfile } from "./AppProfile";
-import { Route } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard";
 import { FormsDemo } from "./components/FormsDemo";
 import { SampleDemo } from "./components/SampleDemo";
@@ -17,6 +16,12 @@ import { ChartsDemo } from "./components/ChartsDemo";
 import { MiscDemo } from "./components/MiscDemo";
 import { EmptyPage } from "./components/EmptyPage";
 import { Documentation } from "./components/Documentation";
+
+/* Pages */
+import Categories from "./components/pages/category/Categories";
+import Suppliers from "./components/pages/suppliers/Suppliers";
+/* Pages */
+
 import "primereact/resources/themes/nova-light/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -97,41 +102,46 @@ class App extends Component {
             {
                 label: "Dashboard",
                 icon: "pi pi-fw pi-home",
-                command: () => {
-                    window.location = "#/";
-                }
+                to: "/"
             },
             {
-                label: "Menu Modes",
-                icon: "pi pi-fw pi-cog",
-                items: [
-                    {
-                        label: "Static Menu",
-                        icon: "pi pi-fw pi-bars",
-                        command: () => this.setState({ layoutMode: "static" })
-                    },
-                    {
-                        label: "Overlay Menu",
-                        icon: "pi pi-fw pi-bars",
-                        command: () => this.setState({ layoutMode: "overlay" })
-                    }
-                ]
+                label: "Catagories",
+                icon: "pi pi-fw pi-tags",
+                to: "/catagories"
             },
             {
-                label: "Menu Colors",
-                icon: "pi pi-fw pi-align-left",
+                label: "Products",
+                icon: "pi pi-fw pi-mobile",
+                to: "/products"
+            },
+            {
+                label: "Suppliers",
+                icon: "pi pi-fw pi-users",
+                to: "/suppliers"
+            },
+            {
+                label: "Purchase",
+                icon: "pi pi-fw pi-money-bill",
+                to: "/purchase"
+            },
+            {
+                label: "Stock Mangement",
+                icon: "pi pi-fw pi-bars",
                 items: [
                     {
-                        label: "Dark",
-                        icon: "pi pi-fw pi-bars",
-                        command: () =>
-                            this.setState({ layoutColorMode: "dark" })
+                        label: "Stock",
+                        icon: "pi pi-fw pi-th-large",
+                        to: "/stock"
                     },
                     {
-                        label: "Light",
-                        icon: "pi pi-fw pi-bars",
-                        command: () =>
-                            this.setState({ layoutColorMode: "light" })
+                        label: "Stock Movement",
+                        icon: "pi pi-fw pi-sort",
+                        to: "/panels"
+                    },
+                    {
+                        label: "Stock Ledger",
+                        icon: "pi pi-fw pi-file",
+                        to: "/panels"
                     }
                 ]
             },
@@ -268,7 +278,7 @@ class App extends Component {
                 label: "Documentation",
                 icon: "pi pi-fw pi-question",
                 command: () => {
-                    window.location = "#/documentation";
+                    window.location = "/documentation";
                 }
             },
             {
@@ -341,7 +351,8 @@ class App extends Component {
                     onClick={this.onSidebarClick}
                 >
                     <div className="layout-logo">
-                        <img alt="Logo" src={logo} />
+                        <div className="app-name">Invento</div>
+                        <i className="pi pi-shopping-cart"></i>
                     </div>
                     <AppProfile />
                     <AppMenu
@@ -351,21 +362,26 @@ class App extends Component {
                 </div>
 
                 <div className="layout-main">
-                    <Route path="/" exact component={Dashboard} />
-                    <Route path="/forms" component={FormsDemo} />
-                    <Route path="/sample" component={SampleDemo} />
-                    <Route path="/data" component={DataDemo} />
-                    <Route path="/panels" component={PanelsDemo} />
-                    <Route path="/overlays" component={OverlaysDemo} />
-                    <Route path="/menus" component={MenusDemo} />
-                    <Route path="/messages" component={MessagesDemo} />
-                    <Route path="/charts" component={ChartsDemo} />
-                    <Route path="/misc" component={MiscDemo} />
-                    <Route path="/empty" component={EmptyPage} />
-                    <Route path="/documentation" component={Documentation} />
+                    <Switch>
+                        <Route path="/" exact component={Dashboard} />
+                        <Route path="/forms" component={FormsDemo} />
+                        <Route path="/sample" component={SampleDemo} />
+                        <Route path="/data" component={DataDemo} />
+                        <Route path="/panels" component={PanelsDemo} />
+                        <Route path="/overlays" component={OverlaysDemo} />
+                        <Route path="/menus" component={MenusDemo} />
+                        <Route path="/messages" component={MessagesDemo} />
+                        <Route path="/charts" component={ChartsDemo} />
+                        <Route path="/misc" component={MiscDemo} />
+                        <Route path="/empty" component={EmptyPage} />
+                        <Route
+                            path="/documentation"
+                            component={Documentation}
+                        />
+                        <Route path="/catagories" component={Categories} />
+                        <Route path="/suppliers" component={Suppliers} />
+                    </Switch>
                 </div>
-
-                <AppFooter />
 
                 <div className="layout-mask"></div>
             </div>

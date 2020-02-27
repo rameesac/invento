@@ -13,6 +13,14 @@
     .layout-logo {
         text-align: center;
         margin-top: 24px;
+        .app-name {
+            color: $menuitemActiveBgColor;
+            font-size: 35px;
+        }
+        .pi {
+            font-size: 28px;
+            color: $menuitemActiveBgColor !important;
+        }
     }
 
     .menuitem-badge {
