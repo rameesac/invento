@@ -14,8 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all();
-        return $product;
+        return Product::all();
     }
 
     /**
@@ -26,41 +25,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
+        if ($request->id) {
+            $product = Product::find($request->id);
+        } else {
+            $product = new Product;
+        }
+        $product->name = $request->name;
+        $product->code = "CAT_" . strtoupper(substr(trim($request->name), 0, 3));
+        $product->barcode = $request->barcode;
+        $product->category_id = $request->category_id;
+        $product->cost = $request->cost;
+        $product->description = $request->description;
+        $product->save();
+        return $product;
     }
 
     /**
@@ -69,8 +46,8 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(int $id)
     {
-        //
+        return Product::destroy($id);
     }
 }
