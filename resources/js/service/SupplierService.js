@@ -4,6 +4,10 @@ export async function get() {
     return axios.get('/api/supplier').then(res => res.data);
 }
 
+export async function list() {
+    return axios.get('/api/supplier/list').then(res => res.data);
+}
+
 export async function save(supplier) {
     return axios
         .post('/api/supplier', { ...supplier })

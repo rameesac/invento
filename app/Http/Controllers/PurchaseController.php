@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Purchase;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -14,8 +15,7 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        $purchase = Purchase::all();
-        return $purchase;
+        return Purchase::all();
     }
 
     /**
@@ -26,41 +26,20 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Purchase  $purchase
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Purchase $purchase)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Purchase  $purchase
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Purchase $purchase)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Purchase  $purchase
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Purchase $purchase)
-    {
-        //
+        if ($request->id) {
+            $purchase = Purchase::find($request->id);
+        } else {
+            $purchase = new Purchase;
+        }
+        $purchase->dr_cr = $request->dr_cr;
+        $purchase->purchase_date = Carbon::parse($request->purchase_date)->format('Y-m-d');
+        $purchase->supplier_id = $request->supplier_id;
+        $purchase->tax_amount = $request->tax_amount = 0;
+        $purchase->total = $request->total = 0;
+        $purchase->discount = $request->discount = 0;
+        $purchase->description = $request->description;
+        $purchase->save();
+        return $purchase;
     }
 
     /**

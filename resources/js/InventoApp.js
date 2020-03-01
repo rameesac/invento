@@ -21,6 +21,7 @@ import { Documentation } from './components/Documentation';
 import Categories from './components/pages/category/Categories';
 import Suppliers from './components/pages/suppliers/Suppliers';
 import Products from './components/pages/product/Products';
+import Purchase from './components/pages/purchase/Purchase';
 /* Pages */
 
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -382,6 +383,7 @@ class App extends Component {
                         <Route path="/catagories" component={Categories} />
                         <Route path="/suppliers" component={Suppliers} />
                         <Route path="/products" component={Products} />
+                        <Route path="/purchase" component={Purchase} />
                     </Switch>
                 </div>
 
