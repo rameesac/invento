@@ -194,3 +194,111 @@ php artisan make:migration create_stock_ledgers_table --create=stock_ledger
             $table->timestamps();
         });
     }
+
+
+use App\Stock;
+use App\StockLedger;
+
+/**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        if ($request->id) {
+            $purchase = Purchase::find($request->id);
+        } else {
+            $purchase = new Purchase;
+        }
+        $purchase->dr_cr = $request->dr_cr;
+        $purchase->purchase_date = Carbon::parse($request->purchase_date)->format('Y-m-d');
+        $purchase->supplier_id = $request->supplier_id;
+        $purchase->tax_amount = $request->tax_amount = 0;
+        $purchase->total = $request->total = 0;
+        $purchase->discount = $request->discount = 0;
+        $purchase->description = $request->description;
+        $purchase->save();
+        return $purchase;
+
+        foreach(purchase details values) {
+
+            $stock_data = [];
+
+            if(purchase_details_id) { // Delete or Update
+
+                $purchase_details_found = PurchaseDetails::find($request->id);
+                $stock_prev = Stock::find($purchase_details->product_id);
+
+                if($deleted) { // Delete purchase details and update stock, stock ledger
+
+                    $stock_data['type'] = 3;
+                    (+ / -) $stock_data['quantity'] =  ($stock_prev->quantity ? $stock_prev->quantity : 0) - $purchase_details_found->quantity;  // Remove this quantity from stock
+                    $stock_data['rate'] = $purchase_details->rate;
+                    $stock_data['cost'] = $purchase_details->cost;
+                    $stock_data['description'] = getMovementDescription(3);
+
+                    PurchaseDetails::destroy($purchase_details->id);
+
+                } else { // Update purchase details and update stock
+
+                    $stock_data['type'] = 2;
+                   ( + / - ) $stock_data['quantity'] = ($purchase_details_found->quantity - $purchase_details_request->quantity) + ($stock_prev->quantity);
+                    $stock_data['rate'] = $purchase_details->rate;
+                    $stock_data['cost'] = $purchase_details->cost;
+                    $stock_data['description'] = getMovementDescription(2);
+
+                    // Set purchase details values
+
+                    $purchase_details_found = $request->keys;
+                    .....
+
+                    $purchase_details_found->save();
+
+
+                }
+
+            } else {
+                
+
+                $purchase_details = new PurchaseDetails;
+
+                $stock_data['type'] = 1;
+                $stock_data['quantity'] = $purchase_details->quantity;
+                $stock_data['rate'] = $purchase_details->rate;
+                $stock_data['cost'] = $purchase_details->cost;
+                $stock_data['description'] = getMovementDescription(1);
+
+                $purchase_details->save();
+
+            }
+
+
+            protected $fillable = ['product_id', 'quantity', 'rate', 'cost'];
+
+            // Update stock if create / delete / update
+
+            $stock = Stock::updateOrCreate(
+            ['product_id' => $purchase_details->product_id],
+            ['quantity' => $stock_data['quantity'], 'rate' => $stock_data['rate'], 'cost' => $stock_data['cost']]
+            );
+
+
+            protected $fillable = ['stock_movement_type_id', 'purchase_id', 'previouse_quantity', 'latest_quantity', 'description'];
+
+            // If no matching model exists, create one.
+            $stockLedger = StockLedger::create(
+                ['stock_movement_type_id' => $stock_data['type'],
+                'purchase_id' => $purchase->id, 
+                'previouse_quantity' => ($stock_prev->quantity ? $stock_prev->quantity : 0), 
+                'latest_quantity' => $stock_data['quantity'],
+                'description'=> $stock_data['description']]
+            );
+
+        }
+
+        function getMovementDescription(int $create=1) {
+            return 'PURCHASE :Stock '.($create==1)? 'Added' : ($create==2) ? 'Updated' : 'Deleted';
+        }
+    }
