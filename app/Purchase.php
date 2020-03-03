@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Supplier;
 
 class Purchase extends Model
 {
@@ -15,4 +16,12 @@ class Purchase extends Model
 
     protected $fillable = ['dr_cr', 'purchase_date', 'supplier_id', 'tax_amount', 'total', 'discount', 'description'];
 
+        
+    /**
+     * Get the supplier that owns the purchase.
+     */
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier);
+    }
 }
