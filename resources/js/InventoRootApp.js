@@ -1,12 +1,12 @@
-import "react-app-polyfill/ie11";
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./InventoApp";
+import 'react-app-polyfill/ie11';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './InventoApp';
 //import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router } from "react-router-dom";
-import ScrollToTop from "./ScrollToTop";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { BrowserRouter as Router } from 'react-router-dom';
+import ScrollToTop from './ScrollToTop';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
     <Router>
@@ -25,7 +25,7 @@ ReactDOM.render(
             <App></App>
         </ScrollToTop>
     </Router>,
-    document.getElementById("root")
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

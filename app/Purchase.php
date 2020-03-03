@@ -12,4 +12,7 @@ class Purchase extends Model
      * @var string
      */
     protected $table = 'purchase';
+
+    protected $fillable = ['dr_cr', 'purchase_date', 'supplier_id', 'tax_amount', 'total', 'discount', 'description'];
+
 }
