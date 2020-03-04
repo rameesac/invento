@@ -17,7 +17,9 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        return Purchase::all();
+        return Purchase::with('supplier', ['purchase_details' => function ($query) {
+            $query->select('id', 'purchase_id, product_id', 'quantity', 'cost', 'rate', 'discount', 'net_amount');
+        }])->get();
     }
 
     /**
