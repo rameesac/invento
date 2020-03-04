@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Supplier;
+use App\PurchaseDetails;
 
 class Purchase extends Model
 {
@@ -23,5 +24,13 @@ class Purchase extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier);
+    }
+    
+    /**
+     * Get all of the purchase details for the purchase.
+     */
+    public function purchase_details()
+    {
+        return $this->hasMany(PurchaseDetails);
     }
 }
