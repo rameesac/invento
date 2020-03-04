@@ -18,6 +18,7 @@ const Purchase = () => {
         product_id: '',
         quantity: '',
         cost: '',
+        rate: '',
         discount: '',
         tax_amount: '',
         net_amount: ''
@@ -431,6 +432,11 @@ const Purchase = () => {
                             <Column
                                 columnKey="cost"
                                 header="Cost"
+                                body={inputTemplate}
+                            />
+                            <Column
+                                columnKey="rate"
+                                header="Rate"
                                 body={inputTemplate}
                             />
                             <Column
