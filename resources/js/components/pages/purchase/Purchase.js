@@ -15,12 +15,14 @@ import showToast from '../../../service/ToastService';
 
 const Purchase = () => {
     const intialPurchaseDetails = {
+        id: null,
         product_id: '',
         quantity: '',
         cost: '',
         discount: '',
         tax_amount: '',
-        net_amount: ''
+        net_amount: '',
+        deleted: false
     };
     const initialData = {
         id: null,
