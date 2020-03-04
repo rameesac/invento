@@ -4,9 +4,9 @@ export async function get() {
     return axios.get('/api/purchase').then(res => res.data);
 }
 
-export async function save(supplier) {
+export async function save(purchase) {
     return axios
-        .post('/api/purchase', { ...supplier })
+        .post('/api/purchase', { ...purchase })
         .then(function(response) {
             return response;
         })

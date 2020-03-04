@@ -7,15 +7,19 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
+import { AutoComplete } from 'primereact/autocomplete';
 
 import * as purchaseService from '../../../service/PurchaseService';
 import * as supplierService from '../../../service/SupplierService';
+import * as productService from '../../../service/ProductService';
+
 import showToast from '../../../service/ToastService';
 
 const Purchase = () => {
     const intialPurchaseDetails = {
         id: null,
         product_id: '',
+        product_name: '',
         quantity: '',
         cost: '',
         rate: '',
@@ -26,8 +30,8 @@ const Purchase = () => {
     };
     const initialData = {
         id: null,
-        dr_cr: null,
-        purchase_date: '',
+        dr_cr: 1,
+        purchase_date: new Date(),
         supplier_id: null,
         purchase_details: [intialPurchaseDetails],
         tax_amount: '',
@@ -49,6 +53,10 @@ const Purchase = () => {
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
 
+    const [products, setProducts] = useState([]);
+    const [productsNames, setProductsNames] = useState([]);
+    const [productsNameSuggestions, setProductsNameSuggestions] = useState([]);
+
     useEffect(() => {
         initData();
     }, []);
@@ -67,6 +75,10 @@ const Purchase = () => {
     function initData() {
         purchaseService.get().then(data => {
             setPurchases(data);
+        });
+        productService.get().then(data => {
+            setProductsNames(data.map(data => data.name));
+            setProducts(data);
         });
     }
 
@@ -115,14 +127,14 @@ const Purchase = () => {
         event.preventDefault();
         try {
             const formData = { ...purchase };
-            if (isEdit) {
-                (formData.purchase_details).push(deletedPurchaseDetails);
+            if (isEdit && deletedPurchaseDetails.length > 0) {
+                formData.purchase_details.push(...deletedPurchaseDetails);
             }
             await purchaseService.save(formData);
             showToast({
                 message: `Purchase has beed ${
-                    !formData.id ? 'created' : 'updated'
-                    } successfully`,
+                    !purchase.id ? 'created' : 'updated'
+                } successfully`,
                 type: 'SUCCESS'
             });
             initData();
@@ -130,8 +142,8 @@ const Purchase = () => {
         } catch (error) {
             showToast({
                 message: `Error while ${
-                    !formData.id ? 'creating' : 'updating'
-                    }`,
+                    !purchase.id ? 'creating' : 'updating'
+                }`,
                 type: 'ERROR'
             });
         }
@@ -156,9 +168,10 @@ const Purchase = () => {
     }
 
     function intiEditData(data) {
-        setIsEdit();
+        setIsEdit(true);
+        setDeletedPurchaseDetails([]);
         onClick();
-        setPurchase({ 
+        setPurchase({
             id: data.id,
             dr_cr: data.dr_cr,
             purchase_date: data.purchase_date,
@@ -185,10 +198,10 @@ const Purchase = () => {
         const { purchase_details } = { ...purchase };
         const purchasDetailsReduced = purchase_details.filter((data, index) => {
             if (rowIndex === index) {
-                setDeletedPurchaseDetails(detailsData => ({
-                    ...detailsData,
-                    data
-                }))
+                data.deleted = true;
+                let detailsData = [...deletedPurchaseDetails];
+                detailsData.push(data);
+                setDeletedPurchaseDetails(detailsData);
             }
             return rowIndex !== index;
         });
@@ -268,12 +281,69 @@ const Purchase = () => {
 
         return (
             <InputText
-                id={columnKey}
+                id={columnKey + rowIndex}
                 name={columnKey}
                 value={purchase.purchase_details[rowIndex][columnKey] || ''}
                 style={{ width: '100%' }}
                 onChange={e => {
                     handleChange(e, true, rowIndex);
+                }}
+            />
+        );
+    };
+
+    function filterProducts(event, columnKey, rowIndex) {
+        let results = [];
+        const productByBarcode = products.find(product => {
+            return product.barcode === event.query;
+        });
+
+        results = productsNames.filter(name => {
+            return name.toLowerCase().startsWith(event.query.toLowerCase());
+        });
+
+        if (results.length == 0 && productByBarcode) {
+            results = productsNames.filter(name => {
+                return name
+                    .toLowerCase()
+                    .startsWith(productByBarcode.name.toLowerCase());
+            });
+        }
+
+        setProductsNameSuggestions(results);
+
+        if (results.length === 1) {
+            handleChange(
+                {
+                    target: {
+                        name: columnKey,
+                        value: results[0]
+                    }
+                },
+                true,
+                rowIndex
+            );
+            document.getElementById('quantity' + rowIndex).focus();
+        }
+    }
+
+    const autoCompleteTemplate = (data, column) => {
+        const columnKey = column.columnKey;
+        const rowIndex = column.rowIndex;
+
+        return (
+            <AutoComplete
+                id={columnKey + rowIndex}
+                name={columnKey}
+                value={purchase.purchase_details[rowIndex][columnKey] || ''}
+                style={{ width: '100%' }}
+                onChange={e => {
+                    handleChange(e, true, rowIndex);
+                }}
+                appendTo={document.body}
+                suggestions={productsNameSuggestions}
+                completeMethod={e => {
+                    filterProducts(e, columnKey, rowIndex);
                 }}
             />
         );
@@ -322,7 +392,7 @@ const Purchase = () => {
                             className="mb-3"
                             icon="pi pi-plus"
                             onClick={() => {
-                                setIsEdit(true);
+                                setIsEdit(false);
                                 onClick();
                             }}
                         />
@@ -355,7 +425,7 @@ const Purchase = () => {
             <Dialog
                 header={`${!purchase.id ? 'Create New' : 'Update'} purchase ${
                     purchase.name ? ': ' + purchase.name : ''
-                    }`}
+                }`}
                 visible={visible}
                 blockScroll
                 maximizable
@@ -429,15 +499,15 @@ const Purchase = () => {
                             scrollHeight="200px"
                         >
                             <Column
-                                columnKey="product_id"
+                                columnKey="slno"
                                 header="#"
                                 style={{ width: '50px' }}
                                 body={rowIndex}
                             />
                             <Column
-                                columnKey="product_id"
+                                columnKey="product_name"
                                 header="Item"
-                                body={inputTemplate}
+                                body={autoCompleteTemplate}
                             />
                             <Column
                                 columnKey="quantity"

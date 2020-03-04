@@ -23,7 +23,7 @@ class Purchase extends Model
      */
     public function supplier()
     {
-        return $this->belongsTo(Supplier);
+        return $this->belongsTo('App\Supplier');
     }
     
     /**
@@ -31,6 +31,6 @@ class Purchase extends Model
      */
     public function purchase_details()
     {
-        return $this->hasMany(PurchaseDetails);
+        return $this->hasMany('App\PurchaseDetails');
     }
 }
