@@ -14,8 +14,7 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        $purchase = Purchase::all();
-        return $purchase;
+        return Purchase::all()->with('supplier', 'purchase_details')->get();
     }
 
     /**
