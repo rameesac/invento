@@ -5,7 +5,6 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 
@@ -15,13 +14,15 @@ import showToast from '../../../service/ToastService';
 
 const Purchase = () => {
     const intialPurchaseDetails = {
+        id: null,
         product_id: '',
         quantity: '',
         cost: '',
         rate: '',
         discount: '',
         tax_amount: '',
-        net_amount: ''
+        net_amount: '',
+        deleted: false
     };
     const initialData = {
         id: null,
@@ -41,7 +42,9 @@ const Purchase = () => {
     ];
     const [purchase, setPurchase] = useState(initialData);
     const [id, setId] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
     const [purchases, setPurchases] = useState([]);
+    const [deletedPurchaseDetails, setDeletedPurchaseDetails] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
@@ -111,11 +114,15 @@ const Purchase = () => {
     async function handleSave(event) {
         event.preventDefault();
         try {
-            await purchaseService.save(purchase);
+            const formData = { ...purchase };
+            if (isEdit) {
+                (formData.purchase_details).push(deletedPurchaseDetails);
+            }
+            await purchaseService.save(formData);
             showToast({
                 message: `Purchase has beed ${
-                    !purchase.id ? 'created' : 'updated'
-                } successfully`,
+                    !formData.id ? 'created' : 'updated'
+                    } successfully`,
                 type: 'SUCCESS'
             });
             initData();
@@ -123,8 +130,8 @@ const Purchase = () => {
         } catch (error) {
             showToast({
                 message: `Error while ${
-                    !purchase.id ? 'creating' : 'updating'
-                }`,
+                    !formData.id ? 'creating' : 'updating'
+                    }`,
                 type: 'ERROR'
             });
         }
@@ -149,8 +156,9 @@ const Purchase = () => {
     }
 
     function intiEditData(data) {
+        setIsEdit();
         onClick();
-        setPurchase({
+        setPurchase({ 
             id: data.id,
             dr_cr: data.dr_cr,
             purchase_date: data.purchase_date,
@@ -176,6 +184,12 @@ const Purchase = () => {
     function deletePurchaseRow(rowIndex) {
         const { purchase_details } = { ...purchase };
         const purchasDetailsReduced = purchase_details.filter((data, index) => {
+            if (rowIndex === index) {
+                setDeletedPurchaseDetails(detailsData => ({
+                    ...detailsData,
+                    data
+                }))
+            }
             return rowIndex !== index;
         });
         setPurchase(data => ({
@@ -308,6 +322,7 @@ const Purchase = () => {
                             className="mb-3"
                             icon="pi pi-plus"
                             onClick={() => {
+                                setIsEdit(true);
                                 onClick();
                             }}
                         />
@@ -340,7 +355,7 @@ const Purchase = () => {
             <Dialog
                 header={`${!purchase.id ? 'Create New' : 'Update'} purchase ${
                     purchase.name ? ': ' + purchase.name : ''
-                }`}
+                    }`}
                 visible={visible}
                 blockScroll
                 maximizable
