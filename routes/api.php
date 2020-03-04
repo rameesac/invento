@@ -17,9 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('category/list', 'CategoryController@list');
+
 Route::resource('category', 'CategoryController')->except([
     'create', 'edit', 'update', 'show'
 ]);
+
+Route::get('supplier/list', 'SupplierController@list');
 
 Route::resource('supplier', 'SupplierController')->except([
     'create', 'edit', 'update', 'show'

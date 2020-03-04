@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Product;
 
 class Stock extends Model
 {
@@ -12,4 +13,14 @@ class Stock extends Model
      * @var string
      */
     protected $table = 'stock';
+
+    protected $fillable = ['product_id', 'quantity', 'rate', 'cost'];
+    
+    /**
+     * Get the product record associated with the stock.
+     */
+    public function stock()
+    {
+        return $this->hasOne(Product);
+    }
 }

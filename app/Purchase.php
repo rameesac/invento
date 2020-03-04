@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Supplier;
+use App\PurchaseDetails;
 
 class Purchase extends Model
 {
@@ -12,4 +14,23 @@ class Purchase extends Model
      * @var string
      */
     protected $table = 'purchase';
+
+    protected $fillable = ['dr_cr', 'purchase_date', 'supplier_id', 'tax_amount', 'total', 'discount', 'description'];
+
+        
+    /**
+     * Get the supplier that owns the purchase.
+     */
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier);
+    }
+    
+    /**
+     * Get all of the purchase details for the purchase.
+     */
+    public function purchase_details()
+    {
+        return $this->hasMany(PurchaseDetails);
+    }
 }

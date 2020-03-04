@@ -17,7 +17,7 @@ const Products = () => {
         id: null,
         name: '',
         barcode: '',
-        category_id: '',
+        category_id: null,
         cost: '',
         description: ''
     };
@@ -30,16 +30,14 @@ const Products = () => {
 
     useEffect(() => {
         initData();
+    }, []);
+
+    useEffect(() => {
         loadCatagories();
     }, []);
 
     function loadCatagories() {
-        categoryService.get().then(data => {
-            data = data.map(catagory => {
-                catagory['key'] = catagory.id;
-                catagory['value'] = catagory.name;
-                return catagory;
-            });
+        categoryService.list().then(data => {
             setCategories(data);
         });
     }
@@ -73,7 +71,7 @@ const Products = () => {
         const { name, value } = event.target;
         setProduct(data => ({
             ...data,
-            [name]: name === 'category_id' ? value.id : value
+            [name]: value
         }));
     }
 
@@ -125,7 +123,6 @@ const Products = () => {
             cost: data.cost,
             description: data.description
         });
-        console.log(product);
     }
 
     const footer = (
@@ -275,12 +272,15 @@ const Products = () => {
                         <Dropdown
                             name="category_id"
                             id="category_id"
-                            value={product.category_id || ''}
-                            optionLabel="name"
+                            value={product.category_id || null}
                             options={categories}
                             style={{ width: '100%' }}
                             onChange={e => {
-                                handleChange(e);
+                                // handleChange(e);
+                                setProduct(data => ({
+                                    ...data,
+                                    category_id: e.value
+                                }));
                             }}
                             placeholder="Select a Catagory"
                         />

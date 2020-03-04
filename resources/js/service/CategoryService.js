@@ -4,6 +4,10 @@ export async function get() {
     return axios.get('/api/category').then(res => res.data);
 }
 
+export async function list() {
+    return axios.get('/api/category/list').then(res => res.data);
+}
+
 export async function save(category) {
     return axios
         .post('/api/category', { ...category })
