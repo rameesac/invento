@@ -15,7 +15,7 @@ class Purchase extends Model
      */
     protected $table = 'purchase';
 
-    protected $fillable = ['dr_cr', 'purchase_date', 'supplier_id', 'tax_amount', 'total', 'discount', 'description'];
+    protected $fillable = ['dr_cr', 'purchase_date', 'supplier_id', 'net_amount', 'tax_amount', 'total', 'discount', 'description'];
 
         
     /**

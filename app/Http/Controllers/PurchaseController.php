@@ -43,9 +43,10 @@ class PurchaseController extends Controller
             $purchase->dr_cr = $request->dr_cr;
             $purchase->purchase_date = Carbon::parse($request->purchase_date)->format('Y-m-d');
             $purchase->supplier_id = $request->supplier_id;
-            $purchase->tax_amount = $request->tax_amount = 0;
-            $purchase->total = $request->total = 0;
-            $purchase->discount = $request->discount = 0;
+            $purchase->net_amount = $request->net_amount;
+            $purchase->tax_amount = $request->tax_amount;
+            $purchase->total = $request->total;
+            $purchase->discount = $request->discount;
             $purchase->description = $request->description;
             $purchase->save();
 
@@ -112,6 +113,7 @@ class PurchaseController extends Controller
                         $stock_data['type'] = 1;
                         $stock_data['quantity'] = $previouse_stock_qty + $value['quantity'];
                         $stock_data['cost'] = $value['cost'];
+                        $stock_data['rate'] = $value['rate'];
                         $stock_data['description'] = $this->getMovementDescription(1);
 
                         $purchase_details = new PurchaseDetails;
@@ -137,7 +139,7 @@ class PurchaseController extends Controller
 
             if($previouse_stock_qty !== $stock_data['quantity']) {
                 $stockLedger = StockLedger::create(
-                    ['stock_movement_type_id' => $stock_data['type'],
+                    ['stock_movement_type_id' => 4,
                     'purchase_id' => $purchase->id, 
                     'previouse_quantity' => $previouse_stock_qty, 
                     'latest_quantity' => $stock_data['quantity'],

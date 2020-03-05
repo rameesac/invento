@@ -34,6 +34,7 @@ const Purchase = () => {
         purchase_date: new Date(),
         supplier_id: null,
         purchase_details: [intialPurchaseDetails],
+        net_amount: '',
         tax_amount: '',
         total: '',
         discount: '',
@@ -101,21 +102,59 @@ const Purchase = () => {
         setVisibleDelete(false);
     }
 
+    function grandCalculation(purchasDetails) {
+        let net_amount = 0;
+        let total = 0;
+        purchasDetails.forEach(value => {
+            if (value['net_amount']) {
+                net_amount = +net_amount + +value['net_amount'];
+            }
+        });
+        total =
+            +net_amount +
+            (purchase.tax_amount ? +purchase.tax_amount : 0) -
+            (purchase.discount ? +purchase.discount : 0);
+        setPurchase(data => ({
+            ...data,
+            total,
+            net_amount
+        }));
+    }
+
     function handleChange(event, isDetailsChange = false, rowIndex = null) {
         const { name, value } = event.target;
-        if (isDetailsChange && rowIndex !== null) {
-            const { purchase_details } = { ...purchase };
+        const { purchase_details } = { ...purchase };
+        if (isDetailsChange && rowIndex !== null && name !== 'net_amount') {
             const purchasDetailsFound = purchase_details.map((data, index) => {
                 if (rowIndex === index) {
                     data[name] = value;
                 }
                 return data;
             });
+
+            if (
+                ['quantity', 'cost', 'discount'].includes(name) &&
+                purchasDetailsFound[rowIndex].quantity &&
+                purchasDetailsFound[rowIndex].cost
+            ) {
+                purchasDetailsFound[rowIndex].net_amount =
+                    +purchasDetailsFound[rowIndex].quantity *
+                    +purchasDetailsFound[rowIndex].cost;
+                if (purchasDetailsFound[rowIndex].discount) {
+                    purchasDetailsFound[rowIndex].net_amount =
+                        purchasDetailsFound[rowIndex].net_amount -
+                        purchasDetailsFound[rowIndex].discount;
+                }
+                grandCalculation(purchasDetailsFound);
+            }
             setPurchase(data => ({
                 ...data,
                 purchase_details: purchasDetailsFound
             }));
         } else {
+            if (['tax_amount', 'discount'].includes(name)) {
+                grandCalculation(purchase_details);
+            }
             setPurchase(data => ({
                 ...data,
                 [name]: value
@@ -176,6 +215,7 @@ const Purchase = () => {
             dr_cr: data.dr_cr,
             purchase_date: data.purchase_date,
             supplier_id: data.supplier_id,
+            net_amount: data.net_amount,
             tax_amount: data.tax_amount,
             total: data.total,
             discount: data.discount,
@@ -205,9 +245,29 @@ const Purchase = () => {
             }
             return rowIndex !== index;
         });
+        grandCalculation(purchasDetailsReduced);
         setPurchase(data => ({
             ...data,
             purchase_details: purchasDetailsReduced
+        }));
+    }
+
+    function fetchAndSetProductToRowData(
+        event,
+        isDetailsChange = true,
+        rowIndex
+    ) {
+        const { name, value } = event.target;
+        const { purchase_details } = { ...purchase };
+        const product = products.find(p => {
+            return p.name === value;
+        });
+        purchase_details[rowIndex].product_id = product.id;
+        purchase_details[rowIndex].cost = product.cost;
+        purchase_details[rowIndex].rate = product.rate ? product.rate : 0;
+        setPurchase(data => ({
+            ...data,
+            purchase_details
         }));
     }
 
@@ -278,11 +338,13 @@ const Purchase = () => {
     const inputTemplate = (data, column) => {
         const columnKey = column.columnKey;
         const rowIndex = column.rowIndex;
+        const keyfilter = column.keyfilter;
 
         return (
             <InputText
                 id={columnKey + rowIndex}
                 name={columnKey}
+                keyfilter={keyfilter}
                 value={purchase.purchase_details[rowIndex][columnKey] || ''}
                 style={{ width: '100%' }}
                 onChange={e => {
@@ -312,8 +374,8 @@ const Purchase = () => {
 
         setProductsNameSuggestions(results);
 
-        if (results.length === 1) {
-            handleChange(
+        /*         if (results.length === 1) {
+            fetchAndSetProductToRowData(
                 {
                     target: {
                         name: columnKey,
@@ -323,8 +385,7 @@ const Purchase = () => {
                 true,
                 rowIndex
             );
-            document.getElementById('quantity' + rowIndex).focus();
-        }
+        } */
     }
 
     const autoCompleteTemplate = (data, column) => {
@@ -335,10 +396,26 @@ const Purchase = () => {
             <AutoComplete
                 id={columnKey + rowIndex}
                 name={columnKey}
+                placeholder="Products"
                 value={purchase.purchase_details[rowIndex][columnKey] || ''}
-                style={{ width: '100%' }}
+                inputStyle={{ width: '100%' }}
                 onChange={e => {
                     handleChange(e, true, rowIndex);
+                }}
+                onSelect={e => {
+                    fetchAndSetProductToRowData(
+                        {
+                            target: {
+                                name: columnKey,
+                                value:
+                                    purchase.purchase_details[rowIndex][
+                                        columnKey
+                                    ]
+                            }
+                        },
+                        true,
+                        rowIndex
+                    );
                 }}
                 appendTo={document.body}
                 suggestions={productsNameSuggestions}
@@ -408,6 +485,7 @@ const Purchase = () => {
                                 header="Purchase Date"
                             />
                             <Column field="supplier_id" header="Supplier Id" />
+                            <Column field="net_amount" header="Net amount" />
                             <Column field="tax_amount" header="Tax amount" />
                             <Column field="discount" header="Discount" />
                             <Column field="total" header="Total" />
@@ -511,26 +589,31 @@ const Purchase = () => {
                             />
                             <Column
                                 columnKey="quantity"
+                                keyfilter="num"
                                 header="Quantity"
                                 body={inputTemplate}
                             />
                             <Column
                                 columnKey="cost"
+                                keyfilter="money"
                                 header="Cost"
                                 body={inputTemplate}
                             />
                             <Column
                                 columnKey="rate"
+                                keyfilter="money"
                                 header="Rate"
                                 body={inputTemplate}
                             />
                             <Column
                                 columnKey="discount"
+                                keyfilter="money"
                                 header="Discount"
                                 body={inputTemplate}
                             />
                             <Column
                                 columnKey="net_amount"
+                                keyfilter="money"
                                 header="Net Amount"
                                 body={inputTemplate}
                             />
@@ -549,9 +632,11 @@ const Purchase = () => {
                             id="net_amount"
                             name="net_amount"
                             tabIndex="-1"
-                            value={purchase.tax_amount || ''}
+                            value={purchase.net_amount || ''}
                             style={{ width: '100%' }}
-                            readOnly={true}
+                            onChange={e => {
+                                handleChange(e);
+                            }}
                         />
                     </div>
                     <div className="p-md-2 p-offset-7 pt-0">
@@ -592,7 +677,9 @@ const Purchase = () => {
                             tabIndex="-1"
                             value={purchase.total || ''}
                             style={{ width: '100%' }}
-                            readOnly={true}
+                            onChange={e => {
+                                handleChange(e);
+                            }}
                         />
                     </div>
                     <div className="p-md-2">
