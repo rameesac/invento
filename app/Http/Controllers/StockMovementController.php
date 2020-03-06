@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\StockMovement;
+use App\StockMovementType;
 use Illuminate\Http\Request;
 
 class StockMovementController extends Controller
@@ -33,7 +34,7 @@ class StockMovementController extends Controller
         $stockMovement->stock_movement_type_id = $request->stock_movement_type_id;
         $stockMovement->product_id = $request->product_id;
         $stockMovement->quantity = $request->quantity;
-        $stockMovement->narration = $request->narration;
+        $stockMovement->narration = StockMovementType::find($stockMovement->stock_movement_type_id)->name;
         $stockMovement->description = $request->description;
         $stockMovement->save();
         return $stockMovement;
