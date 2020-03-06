@@ -28,7 +28,7 @@ const StockMovement = () => {
     const [stockMovementTypes, setStockMovementTypes] = useState([]);
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
-    
+
     const [products, setProducts] = useState([]);
     const [productsNames, setProductsNames] = useState([]);
     const [productsNameSuggestions, setProductsNameSuggestions] = useState([]);
@@ -48,9 +48,9 @@ const StockMovement = () => {
             setStockMovementTypes(data);
         });
     }
-    
+
     function loadProducts() {
-        productService.list().then(data => {
+        productService.get().then(data => {
             setProductsNames(data.map(data => data.name));
             setProducts(data);
         });
@@ -63,7 +63,7 @@ const StockMovement = () => {
     }
 
     function onClick() {
-        stockMovement(initialData);
+        setStockMovement(initialData);
         setVisible(true);
     }
 
@@ -82,6 +82,7 @@ const StockMovement = () => {
     }
 
     function handleChange(event) {
+        console.log(event.target);
         const { name, value } = event.target;
         setStockMovement(data => ({
             ...data,
@@ -103,12 +104,14 @@ const StockMovement = () => {
             setVisible(false);
         } catch (error) {
             showToast({
-                message: `Error while ${!stockMovement.id ? 'creating' : 'updating'}`,
+                message: `Error while ${
+                    !stockMovement.id ? 'creating' : 'updating'
+                }`,
                 type: 'ERROR'
             });
         }
     }
-    
+
     function filterProducts(event) {
         let results = [];
         const productByBarcode = products.find(product => {
@@ -228,7 +231,7 @@ const StockMovement = () => {
             <div className="p-grid">
                 <div className="p-col-12">
                     <div className="card">
-                        <h1>Products</h1>
+                        <h1>Stock Movement</h1>
                         <Button
                             label="Create"
                             className="mb-3"
@@ -237,13 +240,16 @@ const StockMovement = () => {
                                 onClick();
                             }}
                         />
-                        <DataTable value={setStockMovements} responsive={true}>
+                        <DataTable value={stockMovements} responsive={true}>
                             <Column
                                 style={{ width: '50px' }}
                                 field="id"
                                 header="#"
                             />
-                            <Column field="stock_movement_type" header="Stock Movement Type" />
+                            <Column
+                                field="stock_movement_type"
+                                header="Stock Movement Type"
+                            />
                             <Column field="product_id" header="Product Name" />
                             <Column field="quantity" header="Quantity" />
                             <Column field="narration" header="Narration" />
@@ -259,7 +265,9 @@ const StockMovement = () => {
             </div>
 
             <Dialog
-                header={`${!stockMovement.id ? 'Create New' : 'Update'} Stock Movement ${
+                header={`${
+                    !stockMovement.id ? 'Create New' : 'Update'
+                } Stock Movement ${
                     stockMovement.name ? ': ' + stockMovement.name : ''
                 }`}
                 visible={visible}
@@ -271,15 +279,15 @@ const StockMovement = () => {
             >
                 <div className="p-grid">
                     <div className="p-md-1">
-                        <label htmlFor="category_id">Stock Movement Type</label>
+                        <label htmlFor="category_id">Type</label>
                     </div>
                     <div className="p-md-3">
                         <Dropdown
                             name="stock_movement_type_id"
                             id="stock_movement_type_id"
                             value={stockMovement.stock_movement_type_id || null}
-                            options={stockMovements}
-                            style={{ width: '100%' }}
+                            options={stockMovementTypes}
+                            inputStyle={{ width: '100%' }}
                             onChange={e => {
                                 setStockMovement(data => ({
                                     ...data,
@@ -297,7 +305,7 @@ const StockMovement = () => {
                             id="product_id"
                             name="product_id"
                             placeholder="Select a Product"
-                            value={setStockMovement.product_id || ''}
+                            value={stockMovement.product_id || ''}
                             inputStyle={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
@@ -310,13 +318,13 @@ const StockMovement = () => {
                         />
                     </div>
                     <div className="p-md-1">
-                        <label htmlFor="cost">Quantity</label>
+                        <label htmlFor="quantity">Quantity</label>
                     </div>
-                    <div className="p-md-2">
+                    <div className="p-md-3">
                         <InputText
                             id="quantity"
                             name="quantity"
-                            value={setStockMovement.quantity || ''}
+                            value={stockMovement.quantity || ''}
                             style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
@@ -330,7 +338,7 @@ const StockMovement = () => {
                         <InputTextarea
                             rows={3}
                             name="description"
-                            value={setStockMovement.description || ''}
+                            value={stockMovement.description || ''}
                             onChange={e => {
                                 handleChange(e);
                             }}

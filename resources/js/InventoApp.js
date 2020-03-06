@@ -22,6 +22,7 @@ import Categories from './components/pages/category/Categories';
 import Suppliers from './components/pages/suppliers/Suppliers';
 import Products from './components/pages/product/Products';
 import Purchase from './components/pages/purchase/Purchase';
+import StockMovement from './components/pages/stock-movement/StockMovement';
 /* Pages */
 
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -138,12 +139,12 @@ class App extends Component {
                     {
                         label: 'Stock Movement',
                         icon: 'pi pi-fw pi-sort',
-                        to: '/panels'
+                        to: '/stock-movement'
                     },
                     {
                         label: 'Stock Ledger',
                         icon: 'pi pi-fw pi-file',
-                        to: '/panels'
+                        to: '/stock-ledger'
                     }
                 ]
             },
@@ -384,6 +385,10 @@ class App extends Component {
                         <Route path="/suppliers" component={Suppliers} />
                         <Route path="/products" component={Products} />
                         <Route path="/purchase" component={Purchase} />
+                        <Route
+                            path="/stock-movement"
+                            component={StockMovement}
+                        />
                     </Switch>
                 </div>
 

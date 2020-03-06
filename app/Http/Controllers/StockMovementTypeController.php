@@ -14,63 +14,16 @@ class StockMovementTypeController extends Controller
      */
     public function index()
     {
-        $sockMovementType = StockMovementType::all();
-        return $sockMovementType;
+        return StockMovementType::all();
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function list()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\StockMovementType  $stockMovementType
-     * @return \Illuminate\Http\Response
-     */
-    public function show(StockMovementType $stockMovementType)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\StockMovementType  $stockMovementType
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(StockMovementType $stockMovementType)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\StockMovementType  $stockMovementType
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, StockMovementType $stockMovementType)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\StockMovementType  $stockMovementType
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(StockMovementType $stockMovementType)
-    {
-        //
+        return StockMovementType::select(['name as label', 'id as value'])->get();
     }
 }

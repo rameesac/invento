@@ -49,6 +49,8 @@ Route::resource('stock_movement_type', 'StockMovementTypeController')->except([
     'create', 'edit', 'update', 'show'
 ]);
 
+Route::get('stock_movement_type/list', 'StockMovementTypeController@list');
+
 Route::resource('stock_movement', 'StockMovementController')->except([
     'create', 'edit', 'update', 'show'
 ]);
