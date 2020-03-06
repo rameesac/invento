@@ -49,6 +49,10 @@ Route::resource('stock_movement_type', 'StockMovementTypeController')->except([
     'create', 'edit', 'update', 'show'
 ]);
 
+Route::resource('stock_movement', 'StockMovementController')->except([
+    'create', 'edit', 'update', 'show'
+]);
+
 Route::resource('stock_ledger', 'StockLedgerController')->except([
     'create', 'edit', 'update', 'show'
 ]);
