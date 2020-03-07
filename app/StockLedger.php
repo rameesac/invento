@@ -13,5 +13,5 @@ class StockLedger extends Model
      */
     protected $table = 'stock_ledger';
 
-    protected $fillable = ['stock_movement_type_id', 'purchase_id', 'previouse_quantity', 'latest_quantity', 'description'];
+    protected $fillable = ['stock_movement_type_id', 'purchase_id', 'product_id', 'previouse_quantity', 'latest_quantity', 'description'];
 }

@@ -484,7 +484,10 @@ const Purchase = () => {
                                 field="purchase_date"
                                 header="Purchase Date"
                             />
-                            <Column field="supplier_id" header="Supplier Id" />
+                            <Column
+                                field="supplier.name"
+                                header="Supplier Id"
+                            />
                             <Column field="net_amount" header="Net amount" />
                             <Column field="tax_amount" header="Tax amount" />
                             <Column field="discount" header="Discount" />

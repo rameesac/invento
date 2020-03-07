@@ -139,7 +139,8 @@ class PurchaseController extends Controller
 
             if($previouse_stock_qty !== $stock_data['quantity']) {
                 $stockLedger = StockLedger::create(
-                    ['stock_movement_type_id' => 4,
+                    ['product_id' => $value['product_id'],
+                    'stock_movement_type_id' => 4,
                     'purchase_id' => $purchase->id, 
                     'previouse_quantity' => $previouse_stock_qty, 
                     'latest_quantity' => $stock_data['quantity'],

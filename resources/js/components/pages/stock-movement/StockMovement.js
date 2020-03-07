@@ -19,6 +19,7 @@ const StockMovement = () => {
         id: null,
         stock_movement_type_id: '',
         product_id: null,
+        product_name: '',
         quantity: '',
         description: ''
     };
@@ -82,12 +83,20 @@ const StockMovement = () => {
     }
 
     function handleChange(event) {
-        console.log(event.target);
         const { name, value } = event.target;
-        setStockMovement(data => ({
-            ...data,
-            [name]: value
-        }));
+        if (name === 'product_name') {
+            const product = products.find(p => p.name === value);
+            setStockMovement(data => ({
+                ...data,
+                product_name: product ? product.name : value,
+                product_id: product ? product.id : null
+            }));
+        } else {
+            setStockMovement(data => ({
+                ...data,
+                [name]: value
+            }));
+        }
     }
 
     async function handleSave(event) {
@@ -155,8 +164,9 @@ const StockMovement = () => {
         onClick();
         setStockMovement({
             id: data.id,
-            stock_movement_type_id: data.stock_movement_type_id,
+            stock_movement_type_id: data.stock_movement_type.id,
             product_id: data.product_id,
+            product_name: data.product.name,
             quantity: data.quantity,
             description: data.description
         });
@@ -247,10 +257,13 @@ const StockMovement = () => {
                                 header="#"
                             />
                             <Column
-                                field="stock_movement_type"
+                                field="stock_movement_type.name"
                                 header="Stock Movement Type"
                             />
-                            <Column field="product_id" header="Product Name" />
+                            <Column
+                                field="product.name"
+                                header="Product Name"
+                            />
                             <Column field="quantity" header="Quantity" />
                             <Column field="narration" header="Narration" />
                             <Column field="description" header="Description" />
@@ -298,17 +311,22 @@ const StockMovement = () => {
                         />
                     </div>
                     <div className="p-md-1">
-                        <label htmlFor="product_id">Product</label>
+                        <label htmlFor="product_name">Product</label>
                     </div>
                     <div className="p-md-3">
                         <AutoComplete
-                            id="product_id"
-                            name="product_id"
+                            id="product_name"
+                            name="product_name"
                             placeholder="Select a Product"
-                            value={stockMovement.product_id || ''}
+                            value={stockMovement.product_name || ''}
                             inputStyle={{ width: '100%' }}
                             onChange={e => {
-                                handleChange(e);
+                                handleChange({
+                                    target: {
+                                        name: 'product_name',
+                                        value: e.value
+                                    }
+                                });
                             }}
                             appendTo={document.body}
                             suggestions={productsNameSuggestions}
@@ -324,6 +342,7 @@ const StockMovement = () => {
                         <InputText
                             id="quantity"
                             name="quantity"
+                            keyfilter="num"
                             value={stockMovement.quantity || ''}
                             style={{ width: '100%' }}
                             onChange={e => {

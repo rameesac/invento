@@ -24,6 +24,8 @@ class StockMovementTypeController extends Controller
      */
     public function list()
     {
-        return StockMovementType::select(['name as label', 'id as value'])->get();
+        return StockMovementType::select(['name as label', 'id as value'])
+                                ->where('id', '!=',  4)
+                                ->get();
     }
 }

@@ -212,7 +212,7 @@ const Products = () => {
                             <Column field="code" header="Code" />
                             <Column field="name" header="Name" />
                             <Column field="barcode" header="Barcode" />
-                            <Column field="category_id" header="Category" />
+                            <Column field="category.name" header="Category" />
                             <Column field="cost" header="Cost" />
                             <Column field="description" header="Description" />
                             <Column field="created_at" header="Created On" />
