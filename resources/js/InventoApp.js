@@ -5,17 +5,6 @@ import { AppTopbar } from './AppTopbar';
 import { AppMenu } from './AppMenu';
 import { AppProfile } from './AppProfile';
 import { Dashboard } from './components/Dashboard';
-import { FormsDemo } from './components/FormsDemo';
-import { SampleDemo } from './components/SampleDemo';
-import { DataDemo } from './components/DataDemo';
-import { PanelsDemo } from './components/PanelsDemo';
-import { OverlaysDemo } from './components/OverlaysDemo';
-import { MenusDemo } from './components/MenusDemo';
-import { MessagesDemo } from './components/MessagesDemo';
-import { ChartsDemo } from './components/ChartsDemo';
-import { MiscDemo } from './components/MiscDemo';
-import { EmptyPage } from './components/EmptyPage';
-import { Documentation } from './components/Documentation';
 
 /* Pages */
 import Categories from './components/pages/category/Categories';
@@ -23,6 +12,8 @@ import Suppliers from './components/pages/suppliers/Suppliers';
 import Products from './components/pages/product/Products';
 import Purchase from './components/pages/purchase/Purchase';
 import StockMovement from './components/pages/stock-movement/StockMovement';
+import StockLedger from './components/pages/stock-ledger/StockLedger';
+import Stock from './components/pages/stock/Stock';
 /* Pages */
 
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -147,149 +138,6 @@ class App extends Component {
                         to: '/stock-ledger'
                     }
                 ]
-            },
-            {
-                label: 'Components',
-                icon: 'pi pi-fw pi-globe',
-                badge: '9',
-                items: [
-                    {
-                        label: 'Sample Page',
-                        icon: 'pi pi-fw pi-th-large',
-                        to: '/sample'
-                    },
-                    { label: 'Forms', icon: 'pi pi-fw pi-file', to: '/forms' },
-                    { label: 'Data', icon: 'pi pi-fw pi-table', to: '/data' },
-                    {
-                        label: 'Panels',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/panels'
-                    },
-                    {
-                        label: 'Overlays',
-                        icon: 'pi pi-fw pi-clone',
-                        to: '/overlays'
-                    },
-                    { label: 'Menus', icon: 'pi pi-fw pi-plus', to: '/menus' },
-                    {
-                        label: 'Messages',
-                        icon: 'pi pi-fw pi-spinner',
-                        to: '/messages'
-                    },
-                    {
-                        label: 'Charts',
-                        icon: 'pi pi-fw pi-chart-bar',
-                        to: '/charts'
-                    },
-                    { label: 'Misc', icon: 'pi pi-fw pi-upload', to: '/misc' }
-                ]
-            },
-            {
-                label: 'Template Pages',
-                icon: 'pi pi-fw pi-file',
-                items: [
-                    {
-                        label: 'Empty Page',
-                        icon: 'pi pi-fw pi-circle-off',
-                        to: '/empty'
-                    }
-                ]
-            },
-            {
-                label: 'Menu Hierarchy',
-                icon: 'pi pi-fw pi-search',
-                items: [
-                    {
-                        label: 'Submenu 1',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 1.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    {
-                                        label: 'Submenu 1.1.1',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    },
-                                    {
-                                        label: 'Submenu 1.1.2',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    },
-                                    {
-                                        label: 'Submenu 1.1.3',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    {
-                                        label: 'Submenu 1.2.1',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    },
-                                    {
-                                        label: 'Submenu 1.2.2',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Submenu 2',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 2.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    {
-                                        label: 'Submenu 2.1.1',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    },
-                                    {
-                                        label: 'Submenu 2.1.2',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    },
-                                    {
-                                        label: 'Submenu 2.1.3',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    {
-                                        label: 'Submenu 2.2.1',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    },
-                                    {
-                                        label: 'Submenu 2.2.2',
-                                        icon: 'pi pi-fw pi-bookmark'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                label: 'Documentation',
-                icon: 'pi pi-fw pi-question',
-                command: () => {
-                    window.location = '/documentation';
-                }
-            },
-            {
-                label: 'View Source',
-                icon: 'pi pi-fw pi-search',
-                command: () => {
-                    window.location = 'https://github.com/primefaces/sigma';
-                }
             }
         ];
     }
@@ -367,20 +215,6 @@ class App extends Component {
                 <div className="layout-main">
                     <Switch>
                         <Route path="/" exact component={Dashboard} />
-                        <Route path="/forms" component={FormsDemo} />
-                        <Route path="/sample" component={SampleDemo} />
-                        <Route path="/data" component={DataDemo} />
-                        <Route path="/panels" component={PanelsDemo} />
-                        <Route path="/overlays" component={OverlaysDemo} />
-                        <Route path="/menus" component={MenusDemo} />
-                        <Route path="/messages" component={MessagesDemo} />
-                        <Route path="/charts" component={ChartsDemo} />
-                        <Route path="/misc" component={MiscDemo} />
-                        <Route path="/empty" component={EmptyPage} />
-                        <Route
-                            path="/documentation"
-                            component={Documentation}
-                        />
                         <Route path="/catagories" component={Categories} />
                         <Route path="/suppliers" component={Suppliers} />
                         <Route path="/products" component={Products} />
@@ -389,6 +223,8 @@ class App extends Component {
                             path="/stock-movement"
                             component={StockMovement}
                         />
+                        <Route path="/stock-ledger" component={StockLedger} />
+                        <Route path="/stock" component={Stock} />
                     </Switch>
                 </div>
 

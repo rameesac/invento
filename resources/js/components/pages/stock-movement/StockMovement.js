@@ -236,6 +236,8 @@ const StockMovement = () => {
         );
     };
 
+    const paginatorLeft = <Button icon="pi pi-refresh" onClick={initData} />;
+
     return (
         <>
             <div className="p-grid">
@@ -250,7 +252,14 @@ const StockMovement = () => {
                                 onClick();
                             }}
                         />
-                        <DataTable value={stockMovements} responsive={true}>
+                        <DataTable
+                            value={stockMovements}
+                            responsive={true}
+                            paginator={true}
+                            paginatorLeft={paginatorLeft}
+                            rows={5}
+                            rowsPerPageOptions={[5, 10, 20]}
+                        >
                             <Column
                                 style={{ width: '50px' }}
                                 field="id"

@@ -182,6 +182,8 @@ const Suppliers = () => {
         );
     };
 
+    const paginatorLeft = <Button icon="pi pi-refresh" onClick={initData} />;
+
     return (
         <>
             <div className="p-grid">
@@ -196,7 +198,14 @@ const Suppliers = () => {
                                 onClick();
                             }}
                         />
-                        <DataTable value={suppliers} responsive={true}>
+                        <DataTable
+                            value={suppliers}
+                            responsive={true}
+                            paginator={true}
+                            paginatorLeft={paginatorLeft}
+                            rows={5}
+                            rowsPerPageOptions={[5, 10, 20]}
+                        >
                             <Column
                                 style={{ width: '50px' }}
                                 field="id"

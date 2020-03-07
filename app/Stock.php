@@ -19,8 +19,8 @@ class Stock extends Model
     /**
      * Get the product record associated with the stock.
      */
-    public function stock()
+    public function product()
     {
-        return $this->hasOne('App\Product');
+        return $this->belongsTo('App\Product');
     }
 }

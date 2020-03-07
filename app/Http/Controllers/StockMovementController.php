@@ -18,7 +18,9 @@ class StockMovementController extends Controller
      */
     public function index()
     {
-        return StockMovement::with('stock_movement_type:id,name', 'product:id,name')->get();
+        return StockMovement::with('stock_movement_type:id,name', 'product:id,name')        
+        ->orderBy('id', 'desc')
+        ->get();
     }
 
     /**
@@ -37,28 +39,37 @@ class StockMovementController extends Controller
 
             if ($request->id) {
                 $stockMovement = StockMovement::find($request->id);
-                // TODO : CALCULATION
                 if($stockMovement->quantity > $request->quantity) {
-                    $stock_data['quantity'] = $previouse_stock_qty - ($stockMovement->quantity - $request->quantity);
-                } else if($stockMovement->quantity < $request->quantity) {
-                    $stock_data['quantity'] = $previouse_stock_qty - ($request->quantity 
-                    - $stockMovement->quantity);
+                    if($request->stock_movement_type_id==3) {
+                        $stock_data['quantity'] = $previouse_stock_qty + ($stockMovement->quantity - $request->quantity);
+                    } else {
+                        $stock_data['quantity'] = $previouse_stock_qty - ($stockMovement->quantity - $request->quantity);
+                    }
+                } else if($stockMovement->quantity < $request->quantity) {                                                                                
+                    if($request->stock_movement_type_id==3) {
+                        $stock_data['quantity'] = $previouse_stock_qty - ($request->quantity 
+                        - $stockMovement->quantity);
+                    } else {
+                        $stock_data['quantity'] = $previouse_stock_qty + ($request->quantity 
+                        - $stockMovement->quantity);
+                    }
                 } else {
-                    $stock_data['quantity'] = $previouse_stock_qty;
+                        $stock_data['quantity'] = $previouse_stock_qty;
                 }
                 
             } else {
                 $stockMovement = new StockMovement;
-                if($request->stock_movement_type_id!=3) {
-                    $stock_data['quantity'] = $previouse_stock_qty + $request->quantity;
-                } else {
+                if($request->stock_movement_type_id==3) {
                     $stock_data['quantity'] = $previouse_stock_qty - $request->quantity;
+                } else {
+                    $stock_data['quantity'] = $previouse_stock_qty + $request->quantity;
                 }
             }
             $stockMovement->stock_movement_type_id = $request->stock_movement_type_id;
             $stockMovement->product_id = $request->product_id;
             $stockMovement->quantity = $request->quantity;
-            $stockMovement->narration = "Stock Movement : ". " ".(StockMovementType::find($stockMovement->stock_movement_type_id)->name);
+            $stock_movement_type = StockMovementType::find($stockMovement->stock_movement_type_id)->name;
+            $stockMovement->narration = $stock_movement_type;
             $stockMovement->description = $request->description;
             $stockMovement->save();
 
@@ -66,8 +77,7 @@ class StockMovementController extends Controller
 
             $stock = Stock::updateOrCreate(
                 ['product_id' => $stockMovement->product_id],
-                ['quantity' => $stock_data['quantity'], 
-                'cost' => $stockMovement->cost]
+                ['quantity' => $stock_data['quantity']]
             );
 
             // If no matching model exists, create one.
@@ -76,9 +86,10 @@ class StockMovementController extends Controller
                 $stockLedger = StockLedger::create(
                     ['product_id' => $stockMovement->product_id,
                     'stock_movement_type_id' => $stockMovement->stock_movement_type_id,
+                    'movement_id' => $stockMovement->id,
                     'previouse_quantity' => $previouse_stock_qty, 
                     'latest_quantity' => $stock_data['quantity'],
-                    'description'=> $stockMovement->narration]
+                    'description'=> "Stock Movement : ". " ".$stock_movement_type]
                 );
             }
             
@@ -98,6 +109,45 @@ class StockMovementController extends Controller
      */
     public function destroy(int $id)
     {
-        return StockMovement::destroy($id);
+        DB::beginTransaction();
+        try {
+            $stock_data = [];
+            $movement = StockMovement::find($id);
+            $stock = Stock::where('product_id', $movement->product_id)->get()->first();
+            $previouse_stock_qty = $stock ?  $stock->quantity : 0;
+
+            $stock_movement_type = StockMovementType::find($movement->stock_movement_type_id)->name;
+
+            if($movement->stock_movement_type_id === 3) {
+                $stock_data['quantity'] = $previouse_stock_qty + $movement->quantity;
+            } else {
+                $stock_data['quantity'] = $previouse_stock_qty - $movement->quantity;
+            }
+
+            // Update stock if create / delete / update
+
+            $stock->update(['quantity' => $stock_data['quantity']]);
+
+            // If no matching model exists, create one.
+
+            if($previouse_stock_qty !== $stock_data['quantity']) {
+                $stockLedger = StockLedger::create(
+                    ['product_id' => $movement->product_id,
+                    'stock_movement_type_id' => $movement->stock_movement_type_id,
+                    'movement_id' => $movement->id,
+                    'previouse_quantity' => $previouse_stock_qty, 
+                    'latest_quantity' => $stock_data['quantity'],
+                    'description'=> "Stock Movement DELETE: ". " ".$stock_movement_type]
+                );
+            }
+            
+            $movement->delete();
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw new \ErrorException($th);
+        }
+        DB::commit();
+        return response(200);
     }
 }

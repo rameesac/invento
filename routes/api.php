@@ -42,7 +42,7 @@ Route::resource('purchase_details', 'PurchaseDetailsController')->except([
 ]);
 
 Route::resource('stock', 'StockController')->except([
-    'create', 'edit', 'update', 'show'
+    'create', 'edit', 'update', 'show', 'destroy'
 ]);
 
 Route::resource('stock_movement_type', 'StockMovementTypeController')->except([
@@ -55,6 +55,6 @@ Route::resource('stock_movement', 'StockMovementController')->except([
     'create', 'edit', 'update', 'show'
 ]);
 
-Route::resource('stock_ledger', 'StockLedgerController')->except([
-    'create', 'edit', 'update', 'show'
+Route::resource('stock-ledger', 'StockLedgerController')->except([
+    'create', 'edit', 'update', 'show', 'destroy'
 ]);
