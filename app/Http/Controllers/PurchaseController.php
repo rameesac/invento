@@ -20,7 +20,7 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        return Purchase::with('supplier:id,name', 'purchase_details:id,purchase_id,product_id,quantity,cost,rate,discount,net_amount')
+        return Purchase::with('supplier:id,name', 'purchase_details:id,purchase_id,product_id,product.name as product_name,quantity,cost,rate,discount,net_amount')
         ->orderBy('id', 'desc')
         ->get();
     }
