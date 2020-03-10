@@ -4,7 +4,7 @@
 * Connect a source repository : **GitHub** - https://github.com/rameesac/invento (master)
 * Automate code deployments by connecting your pipeline to **AWS CodeDeploy**, (a service that deploys code changes committed to your source repository to Amazon EC2 instances.)
 
-
+![Invento DevOp](https://invento.s3.amazonaws.com/misc/continuos-deployment-aws.png)
 
 REF : 
 
