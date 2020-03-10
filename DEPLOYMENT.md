@@ -11,3 +11,5 @@
 REF : 
 
 * https://medium.com/awsofthings/deploy-a-php-application-on-ec2-with-github-and-aws-codepipeline-fb38cf204cbb
+* https://github.com/aurbac/codedeploy-codepipeline-with-laravel
+* https://medium.com/faun/deploying-and-scaling-a-laravel-app-on-aws-1349dcd7d17a
