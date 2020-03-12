@@ -14,3 +14,4 @@ REF :
 * https://github.com/aurbac/codedeploy-codepipeline-with-laravel
 * https://medium.com/faun/deploying-and-scaling-a-laravel-app-on-aws-1349dcd7d17a
 * https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-simple-codecommit.html
+* https://semaphoreci.com/blog/7-continuous-integration-tools-for-php-laravel
