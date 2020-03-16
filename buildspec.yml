@@ -1,34 +1,42 @@
 version: 0.2
 
 phases:
-  install: 
+  install:
     runtime-versions:
       php: 7.2
   pre_build: # commands to be run before build
     commands:
+      - echo Install composer
+      - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      - php -r "if (hash_file('sha384', 'composer-setup.php') === 'e0012edf3e80b6978849f5eff0d4b4e4c79ff1609dd1e613307e16318854d24ae64f26d17af3ef0bf7cfb710ca74755a') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+      - php composer-setup.php
+      - php -r "unlink('composer-setup.php');"
 
+      - echo Move composer to bin location for excecution
+      - mv composer.phar /usr/local/bin/composer
   build:
     commands:
-    - echo Build started on `date`
+      - echo Build started on `date`
 
-    - echo installing composer...
-    - composer install --optimize-autoloader --no-dev
+      - echo installing composer...
+      - composer install --optimize-autoloader --no-dev
 
-    - echo installing node packages...
-    - npm install
+      - echo installing node packages...
+      - npm install
 
-    - echo creating .env file...
-    - cp .env.example .env
+      - echo creating .env file...
+      - cp .env.example .env
 
-    - echo generating app key
-    - php artisan key:generate
+      - echo generating app key
+      - php artisan key:generate
 
-    - echo Optimizing Configuration Loading
-    - php artisan config:cache
+      - echo Optimizing Configuration Loading
+      - php artisan config:cache
 
-    - echo Optimizing Route Loading
-    - php artisan route:cache
+      - echo Optimizing Route Loading
+      - php artisan route:cache
 
   post_build:
     commands:
+      
       - echo Build completed on `date`
