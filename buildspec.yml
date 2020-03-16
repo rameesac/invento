@@ -12,6 +12,9 @@ phases:
       - php composer-setup.php
       - php -r "unlink('composer-setup.php');"
 
+      - echo check composer
+      - composer
+
       - echo Move composer to bin location for excecution
       - mv composer.phar /usr/local/bin/composer
   build:
