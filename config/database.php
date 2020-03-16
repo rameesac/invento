@@ -4,11 +4,11 @@ use Illuminate\Support\Str;
 
 // For AWS RDS Development
 
-define('RDS_HOSTNAME', $_SERVER['RDS_HOSTNAME']);
+/* define('RDS_HOSTNAME', $_SERVER['RDS_HOSTNAME']);
 define('RDS_PORT', $_SERVER['RDS_PORT']);
 define('RDS_DB_NAME', $_SERVER['RDS_DB_NAME']);
 define('RDS_USERNAME', $_SERVER['RDS_USERNAME']);
-define('RDS_PASSWORD', $_SERVER['RDS_PASSWORD']); 
+define('RDS_PASSWORD', $_SERVER['RDS_PASSWORD']);  */
 
 // For Local Development
 
@@ -62,11 +62,11 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => RDS_HOSTNAME,
-            'port' => RDS_PORT,
-            'database' => RDS_DB_NAME,
-            'username' => RDS_USERNAME,
-            'password' => RDS_PASSWORD,
+            'host' => $_SERVER['RDS_HOSTNAME'],
+            'port' => $_SERVER['RDS_PORT'],
+            'database' => $_SERVER['RDS_DB_NAME'],
+            'username' => $_SERVER['RDS_USERNAME'],
+            'password' => $_SERVER['RDS_PASSWORD'],
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
