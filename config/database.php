@@ -2,6 +2,26 @@
 
 use Illuminate\Support\Str;
 
+// For AWS RDS Development
+
+/*
+
+define('RDS_HOSTNAME', $_SERVER['RDS_HOSTNAME']);
+define('RDS_PORT', $_SERVER['RDS_PORT']);
+define('RDS_DB_NAME', $_SERVER['RDS_DB_NAME']);
+define('RDS_USERNAME', $_SERVER['RDS_USERNAME']);
+define('RDS_PASSWORD', $_SERVER['RDS_PASSWORD']); 
+
+*/
+
+// For Local Development
+
+define('RDS_HOSTNAME', env('DB_HOST', '127.0.0.1'));
+define('RDS_PORT', env('DB_PORT', '3306'));
+define('RDS_DB_NAME', env('DB_DATABASE', 'forge'));
+define('RDS_USERNAME', env('DB_USERNAME', 'forge'));
+define('RDS_PASSWORD', env('DB_PASSWORD', '')); 
+
 return [
 
     /*
@@ -46,11 +66,11 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => RDS_HOSTNAME,
+            'port' => RDS_PORT,
+            'database' => RDS_DB_NAME,
+            'username' => RDS_USERNAME,
+            'password' => RDS_PASSWORD,
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

@@ -6,39 +6,65 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown } from 'primereact/dropdown';
+import { AutoComplete } from 'primereact/autocomplete';
 
-import * as supplierService from '../../../service/SupplierService';
+import * as productService from '../../../service/ProductService';
+import * as stockMovementService from '../../../service/StockMovementService';
+import * as stockMovementTypeService from '../../../service/StockMovementTypeService';
 import showToast from '../../../service/ToastService';
 
-const Suppliers = () => {
+const StockMovement = () => {
     const initialData = {
         id: null,
-        name: '',
-        contact_person: '',
-        mobile: '',
-        email: '',
-        address_one: '',
-        address_two: '',
+        stock_movement_type_id: '',
+        product_id: null,
+        product_name: '',
+        quantity: '',
         description: ''
     };
-    const [supplier, setSupplier] = useState(initialData);
+    const [stockMovement, setStockMovement] = useState(initialData);
     const [id, setId] = useState(null);
-    const [suppliers, setSuppliers] = useState([]);
+    const [stockMovements, setStockMovements] = useState([]);
+    const [stockMovementTypes, setStockMovementTypes] = useState([]);
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
+
+    const [products, setProducts] = useState([]);
+    const [productsNames, setProductsNames] = useState([]);
+    const [productsNameSuggestions, setProductsNameSuggestions] = useState([]);
 
     useEffect(() => {
         initData();
     }, []);
 
+    useEffect(() => {
+        loadStockMovementTypes();
+        loadProducts();
+    }, []);
+
+    function loadStockMovementTypes() {
+        stockMovementTypeService.list().then(data => {
+            data.unshift({ label: 'Select a type', value: null });
+            setStockMovementTypes(data);
+        });
+    }
+
+    function loadProducts() {
+        productService.get().then(data => {
+            setProductsNames(data.map(data => data.name));
+            setProducts(data);
+        });
+    }
+
     function initData() {
-        supplierService.get().then(data => {
-            setSuppliers(data);
+        stockMovementService.get().then(data => {
+            setStockMovements(data);
         });
     }
 
     function onClick() {
-        setSupplier(initialData);
+        setStockMovement(initialData);
         setVisible(true);
     }
 
@@ -58,19 +84,28 @@ const Suppliers = () => {
 
     function handleChange(event) {
         const { name, value } = event.target;
-        setSupplier(data => ({
-            ...data,
-            [name]: value
-        }));
+        if (name === 'product_name') {
+            const product = products.find(p => p.name === value);
+            setStockMovement(data => ({
+                ...data,
+                product_name: product ? product.name : value,
+                product_id: product ? product.id : null
+            }));
+        } else {
+            setStockMovement(data => ({
+                ...data,
+                [name]: value
+            }));
+        }
     }
 
     async function handleSave(event) {
         event.preventDefault();
         try {
-            await supplierService.save(supplier);
+            await stockMovementService.save(stockMovement);
             showToast({
-                message: `Supplier has beed ${
-                    !supplier.id ? 'created' : 'updated'
+                message: `Stock Movement has beed ${
+                    !stockMovement.id ? 'created' : 'updated'
                 } successfully`,
                 type: 'SUCCESS'
             });
@@ -79,19 +114,40 @@ const Suppliers = () => {
         } catch (error) {
             showToast({
                 message: `Error while ${
-                    !supplier.id ? 'creating' : 'updating'
+                    !stockMovement.id ? 'creating' : 'updating'
                 }`,
                 type: 'ERROR'
             });
         }
     }
 
+    function filterProducts(event) {
+        let results = [];
+        const productByBarcode = products.find(product => {
+            return product.barcode === event.query;
+        });
+
+        results = productsNames.filter(name => {
+            return name.toLowerCase().startsWith(event.query.toLowerCase());
+        });
+
+        if (results.length == 0 && productByBarcode) {
+            results = productsNames.filter(name => {
+                return name
+                    .toLowerCase()
+                    .startsWith(productByBarcode.name.toLowerCase());
+            });
+        }
+
+        setProductsNameSuggestions(results);
+    }
+
     async function handleDelete(event, id) {
         event.preventDefault();
         try {
-            await supplierService.destroy(id);
+            await stockMovementService.destroy(id);
             showToast({
-                message: 'Supplier has beed deleted successfully',
+                message: 'Stock Movement has beed deleted successfully',
                 type: 'SUCCESS'
             });
             initData();
@@ -106,14 +162,12 @@ const Suppliers = () => {
 
     function intiEditData(data) {
         onClick();
-        setSupplier({
+        setStockMovement({
             id: data.id,
-            name: data.name,
-            contact_person: data.contact_person,
-            mobile: data.mobile,
-            email: data.email,
-            address_one: data.address_one,
-            address_two: data.address_two,
+            stock_movement_type_id: data.stock_movement_type.id,
+            product_id: data.product_id,
+            product_name: data.product.name,
+            quantity: data.quantity,
             description: data.description
         });
     }
@@ -189,7 +243,7 @@ const Suppliers = () => {
             <div className="p-grid">
                 <div className="p-col-12">
                     <div className="card">
-                        <h1>Suppliers</h1>
+                        <h1>Stock Movement</h1>
                         <Button
                             label="Create"
                             className="mb-3"
@@ -199,7 +253,7 @@ const Suppliers = () => {
                             }}
                         />
                         <DataTable
-                            value={suppliers}
+                            value={stockMovements}
                             responsive={true}
                             paginator={true}
                             paginatorLeft={paginatorLeft}
@@ -211,16 +265,16 @@ const Suppliers = () => {
                                 field="id"
                                 header="#"
                             />
-                            <Column field="code" header="Code" />
-                            <Column field="name" header="Name" />
                             <Column
-                                field="contact_person"
-                                header="Contact Person"
+                                field="stock_movement_type.name"
+                                header="Stock Movement Type"
                             />
-                            <Column field="mobile" header="Mobile" />
-                            <Column field="email" header="Email" />
-                            <Column field="address_one" header="Address 1" />
-                            <Column field="address_two" header="Address 2" />
+                            <Column
+                                field="product.name"
+                                header="Product Name"
+                            />
+                            <Column field="quantity" header="Quantity" />
+                            <Column field="narration" header="Narration" />
                             <Column field="description" header="Description" />
                             <Column field="created_at" header="Created On" />
                             <Column
@@ -233,8 +287,10 @@ const Suppliers = () => {
             </div>
 
             <Dialog
-                header={`${!supplier.id ? 'Create New' : 'Update'} Supplier ${
-                    supplier.name ? ': ' + supplier.name : ''
+                header={`${
+                    !stockMovement.id ? 'Create New' : 'Update'
+                } Stock Movement ${
+                    stockMovement.name ? ': ' + stockMovement.name : ''
                 }`}
                 visible={visible}
                 style={{ width: '50vw' }}
@@ -244,84 +300,59 @@ const Suppliers = () => {
                 }}
             >
                 <div className="p-grid">
-                    <div className="p-md-2">
-                        <label htmlFor="name">Name</label>
+                    <div className="p-md-1">
+                        <label htmlFor="category_id">Type</label>
                     </div>
-                    <div className="p-md-10">
-                        <InputText
-                            id="name"
-                            name="name"
-                            value={supplier.name || ''}
-                            style={{ width: '100%' }}
+                    <div className="p-md-3">
+                        <Dropdown
+                            name="stock_movement_type_id"
+                            id="stock_movement_type_id"
+                            value={stockMovement.stock_movement_type_id || null}
+                            options={stockMovementTypes}
+                            inputStyle={{ width: '100%' }}
                             onChange={e => {
-                                handleChange(e);
+                                setStockMovement(data => ({
+                                    ...data,
+                                    stock_movement_type_id: e.value
+                                }));
+                            }}
+                            placeholder="Select a Movement Type"
+                        />
+                    </div>
+                    <div className="p-md-1">
+                        <label htmlFor="product_name">Product</label>
+                    </div>
+                    <div className="p-md-3">
+                        <AutoComplete
+                            id="product_name"
+                            name="product_name"
+                            placeholder="Select a Product"
+                            value={stockMovement.product_name || ''}
+                            inputStyle={{ width: '100%' }}
+                            onChange={e => {
+                                handleChange({
+                                    target: {
+                                        name: 'product_name',
+                                        value: e.value
+                                    }
+                                });
+                            }}
+                            appendTo={document.body}
+                            suggestions={productsNameSuggestions}
+                            completeMethod={e => {
+                                filterProducts(e);
                             }}
                         />
                     </div>
-                    <div className="p-md-2">
-                        <label htmlFor="contact_person">Contact Person</label>
+                    <div className="p-md-1">
+                        <label htmlFor="quantity">Quantity</label>
                     </div>
-                    <div className="p-md-10">
+                    <div className="p-md-3">
                         <InputText
-                            id="contact_person"
-                            name="contact_person"
-                            value={supplier.contact_person || ''}
-                            style={{ width: '100%' }}
-                            onChange={e => {
-                                handleChange(e);
-                            }}
-                        />
-                    </div>
-                    <div className="p-md-2">
-                        <label htmlFor="mobile">Mobile</label>
-                    </div>
-                    <div className="p-md-10">
-                        <InputText
-                            id="mobile"
-                            name="mobile"
-                            value={supplier.mobile || ''}
-                            style={{ width: '100%' }}
-                            onChange={e => {
-                                handleChange(e);
-                            }}
-                        />
-                    </div>
-                    <div className="p-md-2">
-                        <label htmlFor="email">Email</label>
-                    </div>
-                    <div className="p-md-10">
-                        <InputText
-                            id="email"
-                            name="email"
-                            value={supplier.email || ''}
-                            style={{ width: '100%' }}
-                            onChange={e => {
-                                handleChange(e);
-                            }}
-                        />
-                    </div>
-                    <div className="p-md-2">
-                        <label htmlFor="address_one">Address 1</label>
-                    </div>
-                    <div className="p-md-10">
-                        <InputText
-                            id="address_one"
-                            name="address_one"
-                            value={supplier.address_one || ''}
-                            style={{ width: '100%' }}
-                            onChange={e => {
-                                handleChange(e);
-                            }}
-                        />
-                    </div>
-                    <div className="p-md-2">
-                        <label htmlFor="address_two">Address 2</label>
-                    </div>
-                    <div className="p-md-10">
-                        <InputText
-                            id="address_two"
-                            name="address_two"
-                            value={supplier.address_two || ''}
+                            id="quantity"
+                            name="quantity"
+                            keyfilter="num"
+                            value={stockMovement.quantity || ''}
                             style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
@@ -335,7 +366,7 @@ const Suppliers = () => {
                         <InputTextarea
                             rows={3}
                             name="description"
-                            value={supplier.description || ''}
+                            value={stockMovement.description || ''}
                             onChange={e => {
                                 handleChange(e);
                             }}
@@ -347,7 +378,7 @@ const Suppliers = () => {
             </Dialog>
 
             <Dialog
-                header="Delete Supplier"
+                header="Delete Stock Movement"
                 visible={visibleDelete}
                 style={{ width: '30vw' }}
                 footer={footerDelete}
@@ -366,4 +397,4 @@ const Suppliers = () => {
     );
 };
 
-export default Suppliers;
+export default StockMovement;

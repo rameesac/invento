@@ -23,10 +23,10 @@ const Categories = () => {
     const [visibleDelete, setVisibleDelete] = useState(false);
 
     useEffect(() => {
-        intiData();
+        initData();
     }, []);
 
-    function intiData() {
+    function initData() {
         categoryService.get().then(data => {
             setCategories(data);
         });
@@ -69,7 +69,7 @@ const Categories = () => {
                 } successfully`,
                 type: 'SUCCESS'
             });
-            intiData();
+            initData();
             setVisible(false);
         } catch (error) {
             showToast({
@@ -89,7 +89,7 @@ const Categories = () => {
                 message: 'Category has beed deleted successfully',
                 type: 'SUCCESS'
             });
-            intiData();
+            initData();
             setVisibleDelete(false);
         } catch (error) {
             showToast({
@@ -172,6 +172,8 @@ const Categories = () => {
         );
     };
 
+    const paginatorLeft = <Button icon="pi pi-refresh" onClick={initData} />;
+
     return (
         <>
             <div className="p-grid">
@@ -186,7 +188,14 @@ const Categories = () => {
                                 onClick();
                             }}
                         />
-                        <DataTable value={categories} responsive={true}>
+                        <DataTable
+                            value={categories}
+                            responsive={true}
+                            paginator={true}
+                            paginatorLeft={paginatorLeft}
+                            rows={5}
+                            rowsPerPageOptions={[5, 10, 20]}
+                        >
                             <Column
                                 style={{ width: '50px' }}
                                 field="id"

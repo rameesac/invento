@@ -189,6 +189,8 @@ const Products = () => {
         );
     };
 
+    const paginatorLeft = <Button icon="pi pi-refresh" onClick={initData} />;
+
     return (
         <>
             <div className="p-grid">
@@ -203,7 +205,14 @@ const Products = () => {
                                 onClick();
                             }}
                         />
-                        <DataTable value={products} responsive={true}>
+                        <DataTable
+                            value={products}
+                            responsive={true}
+                            paginator={true}
+                            paginatorLeft={paginatorLeft}
+                            rows={5}
+                            rowsPerPageOptions={[5, 10, 20]}
+                        >
                             <Column
                                 style={{ width: '50px' }}
                                 field="id"
@@ -212,7 +221,7 @@ const Products = () => {
                             <Column field="code" header="Code" />
                             <Column field="name" header="Name" />
                             <Column field="barcode" header="Barcode" />
-                            <Column field="category_id" header="Category" />
+                            <Column field="category.name" header="Category" />
                             <Column field="cost" header="Cost" />
                             <Column field="description" header="Description" />
                             <Column field="created_at" header="Created On" />

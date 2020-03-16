@@ -2,8 +2,8 @@
 
 namespace App;
 
-user App\Category;
-user App\Stock;
+use App\Category;
+use App\Stock;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -20,7 +20,7 @@ class Product extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Category);
+        return $this->belongsTo('App\Category');
     }
     
      /**
@@ -28,6 +28,6 @@ class Product extends Model
      */
     public function stock()
     {
-        return $this->hasOne(Stock);
+        return $this->hasOne('App\Stock');
     }
 }

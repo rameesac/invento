@@ -32,7 +32,7 @@ class PurchaseDetails extends Model
      */
     public function purchase()
     {
-        return $this->belongsTo(Purchase);
+        return $this->belongsTo('App\Purchase');
     }
     
      /**
@@ -40,6 +40,6 @@ class PurchaseDetails extends Model
      */
     public function product()
     {
-        return $this->belongsTo(Product);
+        return $this->belongsTo('App\Product');
     }
 }

@@ -14,13 +14,13 @@ class Stock extends Model
      */
     protected $table = 'stock';
 
-    protected $fillable = ['product_id', 'quantity', 'rate', 'cost'];
+    protected $fillable = ['product_id', 'quantity', 'cost'];
     
     /**
      * Get the product record associated with the stock.
      */
-    public function stock()
+    public function product()
     {
-        return $this->hasOne(Product);
+        return $this->belongsTo('App\Product');
     }
 }

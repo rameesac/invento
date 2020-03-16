@@ -14,7 +14,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return Supplier::all();
+        return Supplier::orderBy('id', 'desc')->get();
     }
 
     /**

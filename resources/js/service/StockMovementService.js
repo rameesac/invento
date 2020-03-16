@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 export async function get() {
-    return axios.get('/api/purchase').then(res => res.data);
+    return axios.get('/api/stock_movement').then(res => res.data);
 }
 
-export async function save(purchase) {
+export async function save(stock_movement) {
     return axios
-        .post('/api/purchase', { ...purchase })
+        .post('/api/stock_movement', { ...stock_movement })
         .then(function(response) {
             return response;
         })
@@ -17,7 +17,7 @@ export async function save(purchase) {
 
 export async function destroy(id) {
     return axios
-        .delete('/api/purchase/' + id)
+        .delete('/api/stock_movement/' + id)
         .then(function(response) {
             return response;
         })
