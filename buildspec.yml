@@ -33,9 +33,6 @@ phases:
       - echo generating app key
       - php artisan key:generate
 
-      - echo running migrations
-      - php artisan migrate --force
-
       - echo Optimizing Configuration Loading
       - php artisan config:cache
 
