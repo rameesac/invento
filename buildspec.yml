@@ -36,8 +36,8 @@ phases:
       - echo running migrations
       - php artisan migrate --force
 
-      #- echo Optimizing Configuration Loading
-      #- php artisan config:cache
+      - echo Optimizing Configuration Loading
+      - php artisan config:cache
 
       - echo Optimizing Route Loading
       - php artisan route:cache
