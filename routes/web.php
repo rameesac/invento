@@ -11,7 +11,7 @@
 |
 */
 
-Auth::routes();
+/* Auth::routes(); */
 
 Route::get('/{path?}', function($path = null){ 
     return view('index');
