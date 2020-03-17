@@ -109,3 +109,5 @@ Since we are using codedeploy, no need to go for below steps :
  Go through Code Deploy :
 
  
+
+ https://deliciousbrains.com/scaling-laravel-using-aws-elastic-beanstalk-part-3-setting-elastic-beanstalk/
