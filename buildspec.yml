@@ -43,3 +43,7 @@ phases:
     commands:
       
       - echo Build completed on `date`
+
+artifacts:
+  files:
+    - '**/*'
