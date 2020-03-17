@@ -24,8 +24,11 @@ phases:
       - echo installing composer...
       - composer install --optimize-autoloader --no-dev
 
-      #- echo installing node packages...
-      #- npm install
+      - echo installing node packages...
+      - npm install
+
+      - echo Run npm prod build
+      - npm run prod
 
       - echo creating .env file...
       - cp .env.example .env
