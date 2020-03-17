@@ -36,8 +36,8 @@ phases:
       - echo Optimizing Configuration Loading
       - php artisan config:cache
 
-      - echo Optimizing Route Loading
-      - php artisan route:cache
+      #- echo Optimizing Route Loading
+      #- php artisan route:cache
 
   post_build:
     commands:
