@@ -77741,7 +77741,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var primereact_dropdown__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(primereact_dropdown__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _service_ProductService__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../service/ProductService */ "./resources/js/service/ProductService.js");
 /* harmony import */ var _service_CategoryService__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../service/CategoryService */ "./resources/js/service/CategoryService.js");
-/* harmony import */ var _service_ToastService__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../service/ToastService */ "./resources/js/service/ToastService.js");
+/* harmony import */ var _service_UnitService__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../service/UnitService */ "./resources/js/service/UnitService.js");
+/* harmony import */ var _service_ToastService__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../service/ToastService */ "./resources/js/service/ToastService.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -77774,13 +77775,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var Products = function Products() {
   var initialData = {
     id: null,
     name: '',
     barcode: '',
     category_id: null,
+    unit_id: null,
     cost: '',
+    rate: '',
     description: ''
   };
 
@@ -77801,18 +77805,23 @@ var Products = function Products() {
 
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      categories = _useState8[0],
-      setCategories = _useState8[1];
+      units = _useState8[0],
+      setUnits = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState10 = _slicedToArray(_useState9, 2),
-      visible = _useState10[0],
-      setVisible = _useState10[1];
+      categories = _useState10[0],
+      setCategories = _useState10[1];
 
   var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
       _useState12 = _slicedToArray(_useState11, 2),
-      visibleDelete = _useState12[0],
-      setVisibleDelete = _useState12[1];
+      visible = _useState12[0],
+      setVisible = _useState12[1];
+
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      visibleDelete = _useState14[0],
+      setVisibleDelete = _useState14[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     initData();
@@ -77820,10 +77829,19 @@ var Products = function Products() {
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     loadCatagories();
   }, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    loadUnits();
+  }, []);
 
   function loadCatagories() {
     _service_CategoryService__WEBPACK_IMPORTED_MODULE_10__["list"]().then(function (data) {
       setCategories(data);
+    });
+  }
+
+  function loadUnits() {
+    _service_UnitService__WEBPACK_IMPORTED_MODULE_11__["list"]().then(function (data) {
+      setUnits(data);
     });
   }
 
@@ -77879,7 +77897,7 @@ var Products = function Products() {
               return _service_ProductService__WEBPACK_IMPORTED_MODULE_9__["save"](product);
 
             case 4:
-              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_11__["default"])({
+              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_12__["default"])({
                 message: "Product has beed ".concat(!product.id ? 'created' : 'updated', " successfully"),
                 type: 'SUCCESS'
               });
@@ -77891,7 +77909,7 @@ var Products = function Products() {
             case 9:
               _context.prev = 9;
               _context.t0 = _context["catch"](1);
-              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_11__["default"])({
+              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_12__["default"])({
                 message: "Error while ".concat(!product.id ? 'creating' : 'updating'),
                 type: 'ERROR'
               });
@@ -77924,7 +77942,7 @@ var Products = function Products() {
               return _service_ProductService__WEBPACK_IMPORTED_MODULE_9__["destroy"](id);
 
             case 4:
-              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_11__["default"])({
+              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_12__["default"])({
                 message: 'Product has beed deleted successfully',
                 type: 'SUCCESS'
               });
@@ -77936,7 +77954,7 @@ var Products = function Products() {
             case 9:
               _context2.prev = 9;
               _context2.t0 = _context2["catch"](1);
-              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_11__["default"])({
+              Object(_service_ToastService__WEBPACK_IMPORTED_MODULE_12__["default"])({
                 message: 'Error while deleting',
                 type: 'ERROR'
               });
@@ -77959,7 +77977,9 @@ var Products = function Products() {
       name: data.name,
       barcode: data.barcode,
       category_id: data.category_id,
+      unit_id: data.unit_id,
       cost: data.cost,
+      rate: data.rate,
       description: data.description
     });
   }
@@ -78057,8 +78077,14 @@ var Products = function Products() {
     field: "category.name",
     header: "Category"
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
+    field: "unit.name",
+    header: "Unit"
+  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
     field: "cost",
     header: "Cost"
+  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
+    field: "rate",
+    header: "Rate"
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
     field: "description",
     header: "Description"
@@ -78104,7 +78130,7 @@ var Products = function Products() {
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
     htmlFor: "barcode"
   }, "Barcode")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "p-md-3"
+    className: "p-md-4"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_inputtext__WEBPACK_IMPORTED_MODULE_6__["InputText"], {
     id: "barcode",
     name: "barcode",
@@ -78116,11 +78142,11 @@ var Products = function Products() {
       handleChange(e);
     }
   })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "p-md-1"
+    className: "p-md-2"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
     htmlFor: "category_id"
   }, "Catagory")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "p-md-3"
+    className: "p-md-4"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_dropdown__WEBPACK_IMPORTED_MODULE_8__["Dropdown"], {
     name: "category_id",
     id: "category_id",
@@ -78139,7 +78165,7 @@ var Products = function Products() {
     },
     placeholder: "Select a Catagory"
   })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "p-md-1"
+    className: "p-md-2"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
     htmlFor: "cost"
   }, "Cost")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -78148,12 +78174,52 @@ var Products = function Products() {
     id: "cost",
     name: "cost",
     value: product.cost || '',
+    keyfilter: "money",
     style: {
       width: '100%'
     },
     onChange: function onChange(e) {
       handleChange(e);
     }
+  })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "p-md-2"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    htmlFor: "rate"
+  }, "Rate")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "p-md-2"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_inputtext__WEBPACK_IMPORTED_MODULE_6__["InputText"], {
+    id: "rate",
+    name: "rate",
+    value: product.rate || '',
+    keyfilter: "money",
+    style: {
+      width: '100%'
+    },
+    onChange: function onChange(e) {
+      handleChange(e);
+    }
+  })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "p-md-1"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    htmlFor: "unit_id"
+  }, "Unit")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "p-md-2"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_dropdown__WEBPACK_IMPORTED_MODULE_8__["Dropdown"], {
+    name: "unit_id",
+    id: "unit_id",
+    value: product.unit_id || null,
+    options: units,
+    style: {
+      width: '100%'
+    },
+    onChange: function onChange(e) {
+      setProduct(function (data) {
+        return _objectSpread({}, data, {
+          unit_id: e.value
+        });
+      });
+    },
+    placeholder: "Select a Unit"
   })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "p-md-2"
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
@@ -81222,6 +81288,82 @@ function showToast(data) {
   } else if (data.type === TOAST_TYPE_ERROR) {
     react_toastify__WEBPACK_IMPORTED_MODULE_0__["toast"].error(data.message, config);
   }
+}
+
+/***/ }),
+
+/***/ "./resources/js/service/UnitService.js":
+/*!*********************************************!*\
+  !*** ./resources/js/service/UnitService.js ***!
+  \*********************************************/
+/*! exports provided: get, list */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "get", function() { return get; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "list", function() { return list; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+function get() {
+  return _get.apply(this, arguments);
+}
+
+function _get() {
+  _get = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            return _context.abrupt("return", axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/unit').then(function (res) {
+              return res.data;
+            }));
+
+          case 1:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _get.apply(this, arguments);
+}
+
+function list() {
+  return _list.apply(this, arguments);
+}
+
+function _list() {
+  _list = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            return _context2.abrupt("return", axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/unit/list').then(function (res) {
+              return res.data;
+            }));
+
+          case 1:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _list.apply(this, arguments);
 }
 
 /***/ }),

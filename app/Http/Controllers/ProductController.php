@@ -14,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::with('category:id,name')->get();
+        return Product::with('category:id,name', 'unit:id,name,short_name')->get();
     }
 
     /**
@@ -34,6 +34,7 @@ class ProductController extends Controller
         $product->code = "CAT_" . strtoupper(substr(trim($request->name), 0, 3));
         $product->barcode = $request->barcode;
         $product->category_id = $request->category_id;
+        $product->unit = $request->unit;
         $product->cost = $request->cost;
         $product->description = $request->description;
         $product->save();
