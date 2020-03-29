@@ -78065,8 +78065,8 @@ var Products = function Products() {
     field: "id",
     header: "#"
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
-    field: "code",
-    header: "Code"
+    field: "sku",
+    header: "SKU"
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
     field: "name",
     header: "Name"
@@ -78077,7 +78077,7 @@ var Products = function Products() {
     field: "category.name",
     header: "Category"
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
-    field: "unit.name",
+    field: "unit.short_name",
     header: "Unit"
   }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_column__WEBPACK_IMPORTED_MODULE_3__["Column"], {
     field: "cost",
@@ -78409,20 +78409,25 @@ var Purchase = function Purchase() {
       visibleDelete = _useState16[0],
       setVisibleDelete = _useState16[1];
 
-  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(false),
       _useState18 = _slicedToArray(_useState17, 2),
-      products = _useState18[0],
-      setProducts = _useState18[1];
+      viewVisible = _useState18[0],
+      setViewVisible = _useState18[1];
 
   var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState20 = _slicedToArray(_useState19, 2),
-      productsNames = _useState20[0],
-      setProductsNames = _useState20[1];
+      products = _useState20[0],
+      setProducts = _useState20[1];
 
   var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState22 = _slicedToArray(_useState21, 2),
-      productsNameSuggestions = _useState22[0],
-      setProductsNameSuggestions = _useState22[1];
+      productsNames = _useState22[0],
+      setProductsNames = _useState22[1];
+
+  var _useState23 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState24 = _slicedToArray(_useState23, 2),
+      productsNameSuggestions = _useState24[0],
+      setProductsNameSuggestions = _useState24[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     initData();
@@ -78460,6 +78465,14 @@ var Purchase = function Purchase() {
 
   function _onHide() {
     setVisible(false);
+  }
+
+  function onClickView() {
+    setViewVisible(true);
+  }
+
+  function onHideView() {
+    setViewVisible(false);
   }
 
   function onClickDelete(id) {
@@ -78638,6 +78651,30 @@ var Purchase = function Purchase() {
 
     _onClick();
 
+    console.log(data);
+
+    var _data = _objectSpread({}, data),
+        purchase_details = _data.purchase_details;
+
+    purchase_details.map(function (detail) {
+      detail['product_name'] = detail.product.name;
+    });
+    setPurchase({
+      id: data.id,
+      dr_cr: data.dr_cr,
+      purchase_date: data.purchase_date,
+      supplier_id: data.supplier_id,
+      net_amount: data.net_amount,
+      tax_amount: data.tax_amount,
+      total: data.total,
+      discount: data.discount,
+      purchase_details: data.purchase_details,
+      description: data.description
+    });
+  }
+
+  function viewData(data) {
+    onViewClick();
     setPurchase({
       id: data.id,
       dr_cr: data.dr_cr,
@@ -78741,9 +78778,27 @@ var Purchase = function Purchase() {
       onHideDelete();
     }
   }));
+  var footerView = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_button__WEBPACK_IMPORTED_MODULE_4__["Button"], {
+    label: "Cancel",
+    className: "p-button-danger",
+    icon: "pi pi-times",
+    onClick: function onClick() {
+      onHideView();
+    }
+  }));
 
   var actionTemplate = function actionTemplate(data, column) {
     return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_button__WEBPACK_IMPORTED_MODULE_4__["Button"], {
+      type: "button",
+      icon: "pi pi-list",
+      className: "p-button-info",
+      style: {
+        marginRight: '.5em'
+      },
+      onClick: function onClick() {
+        onClickView(data);
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_button__WEBPACK_IMPORTED_MODULE_4__["Button"], {
       type: "button",
       icon: "pi pi-pencil",
       className: "p-button-warning",
@@ -78933,7 +78988,7 @@ var Purchase = function Purchase() {
     body: actionTemplate,
     style: {
       textAlign: 'center',
-      width: '8em'
+      width: '10em'
     }
   }))))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_dialog__WEBPACK_IMPORTED_MODULE_5__["Dialog"], {
     header: "".concat(!purchase.id ? 'Create New' : 'Update', " purchase ").concat(purchase.name ? ': ' + purchase.name : ''),
@@ -79151,6 +79206,20 @@ var Purchase = function Purchase() {
     footer: footerDelete,
     onHide: function onHide() {
       onHideDelete();
+    }
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "p-grid"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "p-md-12"
+  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h4", null, "Are you sure."), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h4", null, "Do you want to continue ?")))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(primereact_dialog__WEBPACK_IMPORTED_MODULE_5__["Dialog"], {
+    header: "View Purchase Details",
+    visible: viewVisible,
+    style: {
+      width: '30vw'
+    },
+    footer: footerView,
+    onHide: function onHide() {
+      onHideView();
     }
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "p-grid"

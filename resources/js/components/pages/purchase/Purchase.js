@@ -53,6 +53,7 @@ const Purchase = () => {
     const [suppliers, setSuppliers] = useState([]);
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
+    const [viewVisible, setViewVisible] = useState(false);
 
     const [products, setProducts] = useState([]);
     const [productsNames, setProductsNames] = useState([]);
@@ -90,6 +91,14 @@ const Purchase = () => {
 
     function onHide() {
         setVisible(false);
+    }
+
+    function onClickView() {
+        setViewVisible(true);
+    }
+
+    function onHideView() {
+        setViewVisible(false);
     }
 
     function onClickDelete(id) {
@@ -210,6 +219,28 @@ const Purchase = () => {
         setIsEdit(true);
         setDeletedPurchaseDetails([]);
         onClick();
+        console.log(data);
+
+        const { purchase_details } = { ...data };
+        purchase_details.map(detail => {
+            detail['product_name'] = detail.product.name;
+        });
+        setPurchase({
+            id: data.id,
+            dr_cr: data.dr_cr,
+            purchase_date: data.purchase_date,
+            supplier_id: data.supplier_id,
+            net_amount: data.net_amount,
+            tax_amount: data.tax_amount,
+            total: data.total,
+            discount: data.discount,
+            purchase_details: data.purchase_details,
+            description: data.description
+        });
+    }
+
+    function viewData(data) {
+        onViewClick();
         setPurchase({
             id: data.id,
             dr_cr: data.dr_cr,
@@ -311,9 +342,31 @@ const Purchase = () => {
         </div>
     );
 
+    const footerView = (
+        <div>
+            <Button
+                label="Cancel"
+                className="p-button-danger"
+                icon="pi pi-times"
+                onClick={() => {
+                    onHideView();
+                }}
+            />
+        </div>
+    );
+
     const actionTemplate = (data, column) => {
         return (
             <div>
+                <Button
+                    type="button"
+                    icon="pi pi-list"
+                    className="p-button-info"
+                    style={{ marginRight: '.5em' }}
+                    onClick={() => {
+                        onClickView(data);
+                    }}
+                ></Button>
                 <Button
                     type="button"
                     icon="pi pi-pencil"
@@ -505,13 +558,13 @@ const Purchase = () => {
                             <Column field="created_at" header="Created On" />
                             <Column
                                 body={actionTemplate}
-                                style={{ textAlign: 'center', width: '8em' }}
+                                style={{ textAlign: 'center', width: '10em' }}
                             />
                         </DataTable>
                     </div>
                 </div>
             </div>
-
+            {/* Add / Update Purchase  */}
             <Dialog
                 header={`${!purchase.id ? 'Create New' : 'Update'} purchase ${
                     purchase.name ? ': ' + purchase.name : ''
@@ -710,7 +763,9 @@ const Purchase = () => {
                     </div>
                 </div>
             </Dialog>
+            {/* Add / Update Purchase */}
 
+            {/* Delete Purchase */}
             <Dialog
                 header="Delete Purchase"
                 visible={visibleDelete}
@@ -727,6 +782,26 @@ const Purchase = () => {
                     </div>
                 </div>
             </Dialog>
+            {/* Delete Purchase Details */}
+
+            {/* View Purchase Details */}
+            <Dialog
+                header="View Purchase Details"
+                visible={viewVisible}
+                style={{ width: '30vw' }}
+                footer={footerView}
+                onHide={() => {
+                    onHideView();
+                }}
+            >
+                <div className="p-grid">
+                    <div className="p-md-12">
+                        <h4>Are you sure.</h4>
+                        <h4>Do you want to continue ?</h4>
+                    </div>
+                </div>
+            </Dialog>
+            {/* View Purchase Details */}
         </>
     );
 };

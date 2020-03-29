@@ -33,6 +33,9 @@ phases:
       - echo creating .env file...
       - cp .env.example .env
 
+      - echo Setting storage folder permissions
+      - chmod 777 /var/www/html/storage -R
+
       - echo generating app key
       - php artisan key:generate
 
@@ -44,9 +47,8 @@ phases:
 
   post_build:
     commands:
-      
       - echo Build completed on `date`
 
 artifacts:
   files:
-    - '**/*'
+    - "**/*"

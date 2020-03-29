@@ -235,11 +235,11 @@ const Products = () => {
                                 field="id"
                                 header="#"
                             />
-                            <Column field="code" header="Code" />
+                            <Column field="sku" header="SKU" />
                             <Column field="name" header="Name" />
                             <Column field="barcode" header="Barcode" />
                             <Column field="category.name" header="Category" />
-                            <Column field="unit.name" header="Unit" />
+                            <Column field="unit.short_name" header="Unit" />
                             <Column field="cost" header="Cost" />
                             <Column field="rate" header="Rate" />
                             <Column field="description" header="Description" />
@@ -343,7 +343,7 @@ const Products = () => {
                             }}
                         />
                     </div>
-                    
+
                     <div className="p-md-1">
                         <label htmlFor="unit_id">Unit</label>
                     </div>
