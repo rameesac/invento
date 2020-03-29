@@ -12,9 +12,6 @@ phases:
       - php composer-setup.php
       - php -r "unlink('composer-setup.php');"
 
-      - echo check composer
-      - composer
-
       - echo Move composer to bin location for excecution
       - mv composer.phar /usr/local/bin/composer
   build:
@@ -33,17 +30,11 @@ phases:
       - echo creating .env file...
       - cp .env.example .env
 
-      - echo Setting storage folder permissions
-      - chmod 777 /var/www/html/storage -R
-
       - echo generating app key
       - php artisan key:generate
 
       - echo Optimizing Configuration Loading
       - php artisan config:cache
-
-      #- echo Optimizing Route Loading
-      #- php artisan route:cache
 
   post_build:
     commands:
