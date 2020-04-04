@@ -10,6 +10,8 @@ import { Dropdown } from 'primereact/dropdown';
 
 import * as productService from '../../../service/ProductService';
 import * as categoryService from '../../../service/CategoryService';
+import * as unitService from '../../../service/UnitService';
+
 import showToast from '../../../service/ToastService';
 
 const Products = () => {
@@ -18,12 +20,15 @@ const Products = () => {
         name: '',
         barcode: '',
         category_id: null,
+        unit_id: null,
         cost: '',
+        rate: '',
         description: ''
     };
     const [product, setProduct] = useState(initialData);
     const [id, setId] = useState(null);
     const [products, setProducts] = useState([]);
+    const [units, setUnits] = useState([]);
     const [categories, setCategories] = useState([]);
     const [visible, setVisible] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
@@ -36,9 +41,19 @@ const Products = () => {
         loadCatagories();
     }, []);
 
+    useEffect(() => {
+        loadUnits();
+    }, []);
+
     function loadCatagories() {
         categoryService.list().then(data => {
             setCategories(data);
+        });
+    }
+
+    function loadUnits() {
+        unitService.list().then(data => {
+            setUnits(data);
         });
     }
 
@@ -120,7 +135,9 @@ const Products = () => {
             name: data.name,
             barcode: data.barcode,
             category_id: data.category_id,
+            unit_id: data.unit_id,
             cost: data.cost,
+            rate: data.rate,
             description: data.description
         });
     }
@@ -218,11 +235,13 @@ const Products = () => {
                                 field="id"
                                 header="#"
                             />
-                            <Column field="code" header="Code" />
+                            <Column field="sku" header="SKU" />
                             <Column field="name" header="Name" />
                             <Column field="barcode" header="Barcode" />
                             <Column field="category.name" header="Category" />
+                            <Column field="unit.short_name" header="Unit" />
                             <Column field="cost" header="Cost" />
+                            <Column field="rate" header="Rate" />
                             <Column field="description" header="Description" />
                             <Column field="created_at" header="Created On" />
                             <Column
@@ -263,7 +282,7 @@ const Products = () => {
                     <div className="p-md-2">
                         <label htmlFor="barcode">Barcode</label>
                     </div>
-                    <div className="p-md-3">
+                    <div className="p-md-4">
                         <InputText
                             id="barcode"
                             name="barcode"
@@ -274,10 +293,10 @@ const Products = () => {
                             }}
                         />
                     </div>
-                    <div className="p-md-1">
+                    <div className="p-md-2">
                         <label htmlFor="category_id">Catagory</label>
                     </div>
-                    <div className="p-md-3">
+                    <div className="p-md-4">
                         <Dropdown
                             name="category_id"
                             id="category_id"
@@ -294,7 +313,7 @@ const Products = () => {
                             placeholder="Select a Catagory"
                         />
                     </div>
-                    <div className="p-md-1">
+                    <div className="p-md-2">
                         <label htmlFor="cost">Cost</label>
                     </div>
                     <div className="p-md-2">
@@ -302,10 +321,46 @@ const Products = () => {
                             id="cost"
                             name="cost"
                             value={product.cost || ''}
+                            keyfilter="money"
                             style={{ width: '100%' }}
                             onChange={e => {
                                 handleChange(e);
                             }}
+                        />
+                    </div>
+                    <div className="p-md-2">
+                        <label htmlFor="rate">Rate</label>
+                    </div>
+                    <div className="p-md-2">
+                        <InputText
+                            id="rate"
+                            name="rate"
+                            value={product.rate || ''}
+                            keyfilter="money"
+                            style={{ width: '100%' }}
+                            onChange={e => {
+                                handleChange(e);
+                            }}
+                        />
+                    </div>
+
+                    <div className="p-md-1">
+                        <label htmlFor="unit_id">Unit</label>
+                    </div>
+                    <div className="p-md-2">
+                        <Dropdown
+                            name="unit_id"
+                            id="unit_id"
+                            value={product.unit_id || null}
+                            options={units}
+                            style={{ width: '100%' }}
+                            onChange={e => {
+                                setProduct(data => ({
+                                    ...data,
+                                    unit_id: e.value
+                                }));
+                            }}
+                            placeholder="Select a Unit"
                         />
                     </div>
                     <div className="p-md-2">

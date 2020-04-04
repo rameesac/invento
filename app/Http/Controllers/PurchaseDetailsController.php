@@ -14,8 +14,7 @@ class PurchaseDetailsController extends Controller
      */
     public function index()
     {
-        $purchaseDetails = PurchaseDetails::all();
-        return $purchaseDetails;
+        return PurchaseDetails::all();
     }
 
     /**

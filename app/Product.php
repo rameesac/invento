@@ -4,6 +4,7 @@ namespace App;
 
 use App\Category;
 use App\Stock;
+use App\Unit;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -30,4 +31,13 @@ class Product extends Model
     {
         return $this->hasOne('App\Stock');
     }
+
+    /**
+     * Get the unit that owns the product.
+     */
+     public function unit()
+     {
+         return $this->belongsTo('App\Unit');
+     }
+     
 }
