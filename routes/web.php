@@ -13,8 +13,7 @@
 
 /* Auth::routes(); */
 
-Route::get('/{path?}', function($path = null){ 
-    return view('index');
- })->where('path', '.*');
+Route::view('/{path?}', 'index')->where('path', '.*');
+
 
  
