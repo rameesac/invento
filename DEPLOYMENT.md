@@ -94,20 +94,20 @@ So we have to fetch those value and configure to config/database.php
 
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_PHP.rds.html
 
-
-
 How do I perform Laravel Artisan migrations on AWS Elastic Beanstalk ?
 
-Since we are using codedeploy, no need to go for below steps : 
- 
- Creating a new directory in the root of my project named .ebextensions. In that directory I created a script file migraiton.config:
+Since we are using codedeploy, no need to go for below steps :
 
- https://stackoverflow.com/questions/19754812/aws-elastic-beanstalk-why-would-i-use-leader-only-for-a-command/19782538
- https://stackoverflow.com/questions/22974516/how-do-i-perform-laravel-artisan-migrations-on-aws-elastic-beanstalk
- https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customize-containers-ec2.html
+Creating a new directory in the root of my project named .ebextensions. In that directory I created a script file migraiton.config:
 
- Go through Code Deploy :
+https://stackoverflow.com/questions/19754812/aws-elastic-beanstalk-why-would-i-use-leader-only-for-a-command/19782538
+https://stackoverflow.com/questions/22974516/how-do-i-perform-laravel-artisan-migrations-on-aws-elastic-beanstalk
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customize-containers-ec2.html
 
- 
+Go through Code Deploy :
 
- https://deliciousbrains.com/scaling-laravel-using-aws-elastic-beanstalk-part-3-setting-elastic-beanstalk/
+https://deliciousbrains.com/scaling-laravel-using-aws-elastic-beanstalk-part-3-setting-elastic-beanstalk/
+
+Permission issue resolved by :
+
+https://stackoverflow.com/questions/37878951/how-to-clear-route-caching-on-server-laravel-5-2-37
