@@ -17,3 +17,4 @@ Route::get('/{path?}', function($path = null){
     return view('index');
  })->where('path', '.*');
 
+ 

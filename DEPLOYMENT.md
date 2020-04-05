@@ -111,3 +111,7 @@ https://deliciousbrains.com/scaling-laravel-using-aws-elastic-beanstalk-part-3-s
 Permission issue resolved by :
 
 https://stackoverflow.com/questions/37878951/how-to-clear-route-caching-on-server-laravel-5-2-37
+
+Finding EB Errors :
+
+container_command 09_route_clear in .ebextensions/init.config failed. For more detail, check /var/log/eb-activity.log using console or EB CLI.
